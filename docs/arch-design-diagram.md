@@ -2,7 +2,6 @@
 
 ```mermaid
 sequenceDiagram
-autonumber
 
     actor User
     participant FE as Frontend (React)
@@ -64,9 +63,11 @@ autonumber
     Analytics->>Notify: Create insight notification
 
     Notify->>User: "New Insight Available"
+```
 
 ## Architecture Diagram
 
+```mermaid
 flowchart TB
 
 %% -------------------------
