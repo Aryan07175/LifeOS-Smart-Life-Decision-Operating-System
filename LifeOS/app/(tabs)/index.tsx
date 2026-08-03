@@ -3,6 +3,7 @@
  *
  * Thin compositor: fetches data via hooks and delegates
  * rendering to dedicated section components.
+ * Updated to pass pendingCount to Greeting for context-aware subtitle.
  */
 
 import React, { useCallback } from 'react';
@@ -26,6 +27,7 @@ import {
     AIReflection,
     RecentActivity,
 } from '@/components/dashboard';
+import { COLORS } from '@/utils/designTokens';
 
 export default function DashboardScreen() {
     const router = useRouter();
@@ -49,23 +51,27 @@ export default function DashboardScreen() {
     const handleAskAI = () => router.push('/(tabs)/ai');
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
 
             <ScrollView
                 showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ paddingBottom: 24 }}
+                contentContainerStyle={{ paddingBottom: 32 }}
                 refreshControl={
                     <RefreshControl
                         refreshing={isRefreshing}
                         onRefresh={onRefresh}
-                        tintColor="#4F46E5"
-                        colors={['#4F46E5']}
+                        tintColor={COLORS.primary}
+                        colors={[COLORS.primary]}
                     />
                 }
             >
                 <DashboardHeader firstName={user?.firstName} />
-                <Greeting firstName={user?.firstName} isLoading={userLoading} />
+                <Greeting
+                    firstName={user?.firstName}
+                    isLoading={userLoading}
+                    pendingCount={checkins.length}
+                />
                 <ActionRequired checkins={checkins} isLoading={checkinsLoading} />
                 <QuickActions onNewDecision={handleNewDecision} onAskAI={handleAskAI} />
                 <AIReflection insight={insight} isLoading={insightLoading} />

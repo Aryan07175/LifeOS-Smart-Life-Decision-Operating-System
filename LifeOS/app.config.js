@@ -1,14 +1,11 @@
-import { ExpoConfig, ConfigContext } from "expo/config";
-
-export default ({ config }: ConfigContext): ExpoConfig => ({
+export default ({ config }) => ({
   ...config,
   name: "LifeOS",
   slug: "lifeos",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
-  userInterfaceStyle: "automatic", // Supports light/dark as per design spec
-  // @ts-ignore - newArchEnabled is valid for Expo SDK 55
+  userInterfaceStyle: "automatic",
   newArchEnabled: false,
   splash: {
     image: "./assets/splash-icon.png",
@@ -46,12 +43,12 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
   ],
   experiments: {
-    typedRoutes: true, // Enables typed useRouter() and <Link href={...} />
+    typedRoutes: true,
   },
   extra: {
     eas: {
-      projectId: "YOUR_EAS_PROJECT_ID", // Replace after running: eas init
+      projectId: "YOUR_EAS_PROJECT_ID",
     },
   },
-  scheme: "lifeos", // Deep link scheme: lifeos://
+  scheme: "lifeos",
 });

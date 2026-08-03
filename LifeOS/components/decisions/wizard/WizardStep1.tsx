@@ -6,6 +6,8 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SectionLabel } from './StepIndicator';
+import { PressableScale } from '@/components/ui';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 import { CATEGORIES, MOTIVATIONAL_QUOTES } from '@/utils/constants';
 import { getCategoryColor } from '@/utils/helpers';
 import type { WizardState, WizardAction } from './wizardReducer';
@@ -30,45 +32,40 @@ export const WizardStep1: React.FC<Step1Props> = ({
     return (
         <View style={{ gap: 24 }}>
             {/* Autofill from Template */}
-            <TouchableOpacity
+            <PressableScale
                 onPress={onTemplatePress}
-                activeOpacity={0.7}
                 style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    backgroundColor: '#FFFFFF',
-                    borderRadius: 16,
-                    padding: 16,
-                    shadowColor: 'rgba(0,0,0,0.5)',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.04,
-                    shadowRadius: 8,
-                    elevation: 1,
+                    backgroundColor: COLORS.surfaceLowest,
+                    borderRadius: RADII.lg,
+                    padding: SPACING.lg,
+                    ...SHADOWS.card,
                 }}
             >
                 <View
                     style={{
                         width: 44,
                         height: 44,
-                        borderRadius: 14,
-                        backgroundColor: '#E8E6FF',
+                        borderRadius: RADII.md,
+                        backgroundColor: COLORS.primarySurface,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        marginRight: 14,
+                        marginRight: SPACING.md,
                     }}
                 >
-                    <Ionicons name="sparkles" size={20} color="#4F46E5" />
+                    <Ionicons name="sparkles" size={20} color={COLORS.primary} />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: '#111827' }}>
+                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: COLORS.textPrimary }}>
                         Autofill from Template
                     </Text>
-                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 13, color: '#6B7280', marginTop: 2 }}>
+                    <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 13, color: COLORS.textSecondary, marginTop: 2 }}>
                         Start with pre-defined frameworks
                     </Text>
                 </View>
-                <Ionicons name="chevron-forward" size={18} color="#C7C4D8" />
-            </TouchableOpacity>
+                <Ionicons name="chevron-forward" size={18} color={COLORS.textMuted} />
+            </PressableScale>
 
             {/* Decision Title */}
             <View>
@@ -77,11 +74,11 @@ export const WizardStep1: React.FC<Step1Props> = ({
                     value={state.title}
                     onChangeText={(v) => dispatch({ type: 'SET_FIELD', field: 'title', value: v })}
                     placeholder="What is the choice ahead..."
-                    placeholderTextColor="#C7C4D8"
+                    placeholderTextColor={COLORS.textMuted}
                     style={{
                         fontFamily: 'Inter_600SemiBold',
                         fontSize: 22,
-                        color: '#111827',
+                        color: COLORS.textPrimary,
                         letterSpacing: -0.5,
                         paddingVertical: 8,
                         borderBottomWidth: 0,
@@ -93,7 +90,7 @@ export const WizardStep1: React.FC<Step1Props> = ({
             {/* Primary Category */}
             <View>
                 <SectionLabel text="Primary Category" />
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 10 }}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: SPACING.sm }}>
                     {visibleCategories.map((cat) => {
                         const isActive = state.category === cat.key;
                         const catColor = getCategoryColor(cat.key);
@@ -105,21 +102,21 @@ export const WizardStep1: React.FC<Step1Props> = ({
                                 style={{
                                     flexDirection: 'row',
                                     alignItems: 'center',
-                                    gap: 8,
-                                    paddingHorizontal: 16,
+                                    gap: SPACING.sm,
+                                    paddingHorizontal: SPACING.lg,
                                     paddingVertical: 12,
-                                    borderRadius: 14,
+                                    borderRadius: RADII.md,
                                     borderWidth: 1.5,
-                                    borderColor: isActive ? catColor : '#E5E7EB',
-                                    backgroundColor: isActive ? catColor + '0D' : '#FFFFFF',
+                                    borderColor: isActive ? catColor : COLORS.outlineVariant,
+                                    backgroundColor: isActive ? catColor + '12' : COLORS.surfaceLowest,
                                 }}
                             >
-                                <Ionicons name={cat.icon} size={16} color={isActive ? catColor : '#6B7280'} />
+                                <Ionicons name={cat.icon} size={16} color={isActive ? catColor : COLORS.textSecondary} />
                                 <Text
                                     style={{
                                         fontFamily: isActive ? 'Inter_700Bold' : 'Inter_500Medium',
                                         fontSize: 14,
-                                        color: isActive ? catColor : '#374151',
+                                        color: isActive ? catColor : COLORS.textPrimary,
                                     }}
                                 >
                                     {cat.label}
@@ -129,8 +126,8 @@ export const WizardStep1: React.FC<Step1Props> = ({
                     })}
                 </View>
                 {!showAllCategories && (
-                    <TouchableOpacity onPress={() => setShowAllCategories(true)} style={{ marginTop: 8 }}>
-                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: '#4F46E5' }}>
+                    <TouchableOpacity onPress={() => setShowAllCategories(true)} style={{ marginTop: SPACING.md }}>
+                        <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: COLORS.primary }}>
                             Show more categories...
                         </Text>
                     </TouchableOpacity>
@@ -140,16 +137,16 @@ export const WizardStep1: React.FC<Step1Props> = ({
             {/* Context & Nuance */}
             <View>
                 <SectionLabel text="Context & Nuance" />
-                <View style={{ backgroundColor: '#F3F4F6', borderRadius: 16, padding: 16, minHeight: 120 }}>
+                <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.lg, padding: SPACING.xl, minHeight: 120, ...SHADOWS.card }}>
                     <TextInput
                         value={state.description}
                         onChangeText={(v) => dispatch({ type: 'SET_FIELD', field: 'description', value: v })}
                         placeholder="Describe the stakes, the potential outcomes, and how you feel about this decision..."
-                        placeholderTextColor="#9CA3AF"
+                        placeholderTextColor={COLORS.textMuted}
                         style={{
                             fontFamily: 'Inter_400Regular',
                             fontSize: 15,
-                            color: '#374151',
+                            color: COLORS.textPrimary,
                             lineHeight: 24,
                             textAlignVertical: 'top',
                         }}
@@ -159,13 +156,13 @@ export const WizardStep1: React.FC<Step1Props> = ({
             </View>
 
             {/* Motivational Card */}
-            <View style={{ backgroundColor: '#E8E6FF', borderRadius: 20, padding: 24, alignItems: 'center' }}>
-                <Ionicons name="compass-outline" size={32} color="#4F46E5" style={{ marginBottom: 12, opacity: 0.6 }} />
+            <View style={{ backgroundColor: COLORS.primarySurface, borderRadius: RADII.xl, padding: SPACING.xxl, alignItems: 'center' }}>
+                <Ionicons name="compass-outline" size={32} color={COLORS.primary} style={{ marginBottom: 12, opacity: 0.6 }} />
                 <Text
                     style={{
                         fontFamily: 'Inter_500Medium',
                         fontSize: 14,
-                        color: '#464555',
+                        color: COLORS.primary,
                         textAlign: 'center',
                         fontStyle: 'italic',
                         lineHeight: 22,

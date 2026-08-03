@@ -1,5 +1,45 @@
 import { create } from "zustand";
 import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const setStorageItemAsync = async (key: string, value: string) => {
+  if (Platform.OS === 'web') {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.error('Local storage is unavailable:', e);
+    }
+  } else {
+    await SecureStore.setItemAsync(key, value);
+  }
+};
+
+const getStorageItemAsync = async (key: string) => {
+  if (Platform.OS === 'web') {
+    try {
+      return localStorage.getItem(key);
+    } catch (e) {
+      console.error('Local storage is unavailable:', e);
+      return null;
+    }
+  } else {
+    return await SecureStore.getItemAsync(key);
+  }
+};
+
+const deleteStorageItemAsync = async (key: string) => {
+  if (Platform.OS === 'web') {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.error('Local storage is unavailable:', e);
+    }
+  } else {
+    await SecureStore.deleteItemAsync(key);
+  }
+};
 
 // ─── Keys ─────────────────────────────────────────────────────────────────────
 
@@ -32,8 +72,8 @@ export const useAuthStore = create<AuthState>((set) => ({
    * AuthGuard in _layout.tsx reacts to accessToken change → redirects to /(tabs).
    */
   setTokens: async (accessToken, refreshToken) => {
-    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
-    await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken);
+    await setStorageItemAsync(ACCESS_TOKEN_KEY, accessToken);
+    await setStorageItemAsync(REFRESH_TOKEN_KEY, refreshToken);
     set({ accessToken, refreshToken });
   },
 
@@ -43,8 +83,8 @@ export const useAuthStore = create<AuthState>((set) => ({
    * AuthGuard reacts → redirects to /(auth)/login.
    */
   clearTokens: async () => {
-    await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
-    await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+    await deleteStorageItemAsync(ACCESS_TOKEN_KEY);
+    await deleteStorageItemAsync(REFRESH_TOKEN_KEY);
     set({ accessToken: null, refreshToken: null });
   },
 
@@ -53,8 +93,8 @@ export const useAuthStore = create<AuthState>((set) => ({
    * Call this once in app/_layout.tsx before rendering.
    */
   hydrate: async () => {
-    const accessToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
-    const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
+    const accessToken = await getStorageItemAsync(ACCESS_TOKEN_KEY);
+    const refreshToken = await getStorageItemAsync(REFRESH_TOKEN_KEY);
     set({ accessToken, refreshToken, isHydrated: true });
   },
 }));

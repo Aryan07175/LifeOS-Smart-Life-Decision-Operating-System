@@ -6,6 +6,8 @@
  */
 
 import React, { useState } from 'react';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
+import { PressableScale } from '@/components/ui';
 import {
     View,
     Text,
@@ -80,53 +82,61 @@ export default function CheckinScreen() {
     // ─── Section Label ────────────────────────────────────────────────────────
 
     const SectionLabel = ({ icon, label }: { icon: string; label: string }) => (
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12, marginTop: 24 }}>
-            <Ionicons name={icon as any} size={16} color="#4F46E5" />
-            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: '#464555', letterSpacing: 1.2, textTransform: 'uppercase' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.sm, marginBottom: SPACING.md, marginTop: SPACING.xxl }}>
+            <View style={{ width: 26, height: 26, borderRadius: 8, backgroundColor: COLORS.primarySurface, alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name={icon as any} size={13} color={COLORS.primary} />
+            </View>
+            <Text style={[TYPOGRAPHY.caption, { color: COLORS.textMuted }]}>
                 {label}
             </Text>
         </View>
     );
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
 
             {/* ── Header ── */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingVertical: 12 }}>
-                <TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
-                    <Ionicons name="close" size={24} color="#111827" />
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: SPACING.lg, paddingVertical: SPACING.md, borderBottomWidth: 1, borderBottomColor: COLORS.surfaceDim }}>
+                <TouchableOpacity onPress={() => router.back()} style={{ padding: SPACING.sm }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                    <Ionicons name="close" size={24} color={COLORS.textPrimary} />
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 17, color: '#111827' }}>Check-in</Text>
+                <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary }]}>Outcome Check-in</Text>
                 <View style={{ width: 40 }} />
             </View>
 
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 120 }}>
 
-                    {/* Decision title context */}
+                    {/* Decision context banner */}
                     {decision && (
-                        <View style={{ backgroundColor: '#E8E6FF', borderRadius: 16, padding: 16, marginBottom: 8 }}>
-                            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 12, color: '#6B7280', marginBottom: 4 }}>Recording outcome for</Text>
-                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: '#111827' }}>{decision.title}</Text>
+                        <View style={{ backgroundColor: COLORS.primarySurface, borderRadius: RADII.lg, padding: SPACING.lg, marginBottom: SPACING.sm, flexDirection: 'row', alignItems: 'center', gap: SPACING.md }}>
+                            <View style={{ width: 36, height: 36, borderRadius: 10, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <Ionicons name="layers" size={16} color="#FFFFFF" />
+                            </View>
+                            <View style={{ flex: 1 }}>
+                                <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 11, color: COLORS.primary, marginBottom: 2 }}>Recording outcome for</Text>
+                                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: COLORS.textPrimary }} numberOfLines={1}>{decision.title}</Text>
+                            </View>
                         </View>
                     )}
 
                     {/* ── Satisfaction Score ── */}
                     <SectionLabel icon="star-outline" label="Satisfaction Score" />
-                    <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, padding: 24, shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
-                        <Text style={{ fontFamily: 'Inter_800ExtraBold', fontSize: 48, color: '#4F46E5', textAlign: 'center' }}>{satisfaction}</Text>
-                        <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: '#6B7280', textAlign: 'center', marginBottom: 16 }}>out of 10</Text>
+                    <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.xl, padding: SPACING.xxl, ...SHADOWS.cardMedium }}>
+                        <Text style={{ fontFamily: 'Inter_800ExtraBold', fontSize: 52, color: COLORS.primary, textAlign: 'center', letterSpacing: -2 }}>{satisfaction}</Text>
+                        <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textSecondary, textAlign: 'center', marginBottom: SPACING.lg }}>out of 10</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             {Array.from({ length: 10 }, (_, i) => i + 1).map((v) => (
                                 <TouchableOpacity
                                     key={v}
                                     onPress={() => setSatisfaction(v)}
+                                    activeOpacity={0.7}
                                     style={{
                                         width: 28,
                                         height: 28,
                                         borderRadius: 14,
-                                        backgroundColor: v <= satisfaction ? '#4F46E5' : '#F3F4F6',
+                                        backgroundColor: v <= satisfaction ? COLORS.primary : COLORS.surfaceDim,
                                         alignItems: 'center',
                                         justifyContent: 'center',
                                     }}
@@ -147,19 +157,15 @@ export default function CheckinScreen() {
                         multiline
                         textAlignVertical="top"
                         style={{
-                            backgroundColor: '#FFFFFF',
-                            borderRadius: 16,
-                            padding: 16,
+                            backgroundColor: COLORS.surfaceLowest,
+                            borderRadius: RADII.lg,
+                            padding: SPACING.xl,
                             minHeight: 100,
                             fontFamily: 'Inter_400Regular',
                             fontSize: 15,
-                            color: '#111827',
+                            color: COLORS.textPrimary,
                             lineHeight: 22,
-                            shadowColor: 'rgba(0,0,0,0.5)',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.03,
-                            shadowRadius: 8,
-                            elevation: 1,
+                            ...SHADOWS.card,
                         }}
                     />
 
@@ -173,19 +179,15 @@ export default function CheckinScreen() {
                         multiline
                         textAlignVertical="top"
                         style={{
-                            backgroundColor: '#FFFFFF',
-                            borderRadius: 16,
-                            padding: 16,
+                            backgroundColor: COLORS.surfaceLowest,
+                            borderRadius: RADII.lg,
+                            padding: SPACING.xl,
                             minHeight: 80,
                             fontFamily: 'Inter_400Regular',
                             fontSize: 15,
-                            color: '#111827',
+                            color: COLORS.textPrimary,
                             lineHeight: 22,
-                            shadowColor: 'rgba(0,0,0,0.5)',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.03,
-                            shadowRadius: 8,
-                            elevation: 1,
+                            ...SHADOWS.card,
                         }}
                     />
 
@@ -199,19 +201,15 @@ export default function CheckinScreen() {
                         multiline
                         textAlignVertical="top"
                         style={{
-                            backgroundColor: '#FFFFFF',
-                            borderRadius: 16,
-                            padding: 16,
+                            backgroundColor: COLORS.surfaceLowest,
+                            borderRadius: RADII.lg,
+                            padding: SPACING.xl,
                             minHeight: 80,
                             fontFamily: 'Inter_400Regular',
                             fontSize: 15,
-                            color: '#111827',
+                            color: COLORS.textPrimary,
                             lineHeight: 22,
-                            shadowColor: 'rgba(0,0,0,0.5)',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.03,
-                            shadowRadius: 8,
-                            elevation: 1,
+                            ...SHADOWS.card,
                         }}
                     />
 
@@ -305,33 +303,30 @@ export default function CheckinScreen() {
             </KeyboardAvoidingView>
 
             {/* ── Submit Button ── */}
-            <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, paddingHorizontal: 24, paddingBottom: 32, paddingTop: 16, backgroundColor: '#F9FAFB' }}>
-                <TouchableOpacity
+            <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, paddingHorizontal: SPACING.xxl, paddingBottom: 32, paddingTop: SPACING.lg, backgroundColor: COLORS.surface, borderTopWidth: 1, borderTopColor: COLORS.surfaceDim }}>
+                <PressableScale
                     onPress={handleSubmit}
-                    activeOpacity={0.85}
                     disabled={!canSubmit || createOutcome.isPending}
+                    accessibilityLabel="Save check-in"
+                    accessibilityRole="button"
                 >
                     <LinearGradient
-                        colors={canSubmit ? ['#3525CD', '#4F46E5'] : ['#D1D5DB', '#D1D5DB']}
+                        colors={canSubmit ? ['#3525CD', COLORS.primary] : [COLORS.surfaceDim, COLORS.surfaceDim]}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
                         style={{
                             paddingVertical: 16,
-                            borderRadius: 14,
+                            borderRadius: RADII.md,
                             alignItems: 'center',
                             justifyContent: 'center',
-                            shadowColor: canSubmit ? '#4F46E5' : 'transparent',
-                            shadowOffset: { width: 0, height: 6 },
-                            shadowOpacity: 0.3,
-                            shadowRadius: 12,
-                            elevation: canSubmit ? 6 : 0,
+                            ...(canSubmit ? SHADOWS.button : {}),
                         }}
                     >
-                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: '#FFFFFF' }}>
+                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: canSubmit ? '#FFFFFF' : COLORS.textSecondary }}>
                             {createOutcome.isPending ? 'Saving...' : 'Save Check-in'}
                         </Text>
                     </LinearGradient>
-                </TouchableOpacity>
+                </PressableScale>
             </View>
         </SafeAreaView>
     );

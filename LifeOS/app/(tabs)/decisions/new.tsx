@@ -19,6 +19,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { PressableScale } from '@/components/ui';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useCreateDecision, useUpdateDecision, useDecision } from '@/hooks/useDecisions';
 import { usePreDecisionAnalysis } from '@/hooks/useAI';
@@ -203,8 +205,8 @@ export default function NewDecisionScreen() {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#F9FAFB' }}>
-            <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surfaceLowest }}>
+            <StatusBar barStyle="dark-content" backgroundColor={COLORS.surfaceLowest} />
 
             {/* ── Header ── */}
             <View
@@ -212,16 +214,16 @@ export default function NewDecisionScreen() {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
+                    paddingHorizontal: SPACING.lg,
+                    paddingVertical: SPACING.md,
                 }}
             >
-                <TouchableOpacity onPress={handleClose} style={{ padding: 8 }}>
-                    <Ionicons name="close" size={24} color="#111827" />
+                <TouchableOpacity onPress={handleClose} style={{ padding: SPACING.sm }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                    <Ionicons name="close" size={24} color={COLORS.textPrimary} />
                 </TouchableOpacity>
-                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 17, color: '#111827' }}>{isEditMode ? 'Edit Decision' : 'Decision Wizard'}</Text>
-                <TouchableOpacity style={{ padding: 8 }}>
-                    <Ionicons name="ellipsis-vertical" size={20} color="#464555" />
+                <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary }]}>{isEditMode ? 'Edit Decision' : 'Decision Wizard'}</Text>
+                <TouchableOpacity style={{ padding: SPACING.sm }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                    <Ionicons name="ellipsis-vertical" size={20} color={COLORS.textMuted} />
                 </TouchableOpacity>
             </View>
 
@@ -233,7 +235,7 @@ export default function NewDecisionScreen() {
             >
                 <ScrollView
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 120 }}
+                    contentContainerStyle={{ paddingHorizontal: SPACING.xxl, paddingBottom: 120 }}
                     keyboardShouldPersistTaps="handled"
                 >
                     <StepIndicator step={step} total={TOTAL_STEPS} />
@@ -257,58 +259,58 @@ export default function NewDecisionScreen() {
                 style={{
                     flexDirection: 'row',
                     alignItems: 'center',
-                    paddingHorizontal: 24,
-                    paddingVertical: 16,
-                    paddingBottom: 28,
-                    backgroundColor: '#F9FAFB',
+                    paddingHorizontal: SPACING.xxl,
+                    paddingVertical: SPACING.lg,
+                    paddingBottom: SPACING.xxxl,
+                    backgroundColor: COLORS.surfaceLowest,
                     borderTopWidth: 1,
-                    borderTopColor: '#F3F4F6',
-                    gap: 12,
+                    borderTopColor: COLORS.surfaceDim,
+                    gap: SPACING.md,
                 }}
             >
                 {step === 1 ? (
                     <>
-                        <TouchableOpacity onPress={handleClose} style={{ paddingVertical: 12, paddingHorizontal: 20 }}>
-                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 15, color: '#6B7280' }}>Save Draft</Text>
+                        <TouchableOpacity onPress={handleClose} style={{ paddingVertical: SPACING.md, paddingHorizontal: SPACING.xl }}>
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 15, color: COLORS.textSecondary }}>Save Draft</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleNext} disabled={!canGoNext()} activeOpacity={0.85} style={{ flex: 1 }}>
+                        <PressableScale onPress={handleNext} disabled={!canGoNext()} style={{ flex: 1 }}>
                             <LinearGradient
-                                colors={canGoNext() ? ['#3525CD', '#4F46E5'] : ['#D1D5DB', '#D1D5DB']}
+                                colors={canGoNext() ? ['#3525CD', COLORS.primary] : [COLORS.surfaceDim, COLORS.surfaceDim]}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 1 }}
-                                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 15, borderRadius: 14 }}
+                                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 15, borderRadius: RADII.md, ...(canGoNext() ? SHADOWS.button : {}) }}
                             >
-                                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: '#FFFFFF' }}>Continue</Text>
-                                <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
+                                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: canGoNext() ? '#FFFFFF' : COLORS.textSecondary }}>Continue</Text>
+                                <Ionicons name="arrow-forward" size={18} color={canGoNext() ? '#FFFFFF' : COLORS.textSecondary} />
                             </LinearGradient>
-                        </TouchableOpacity>
+                        </PressableScale>
                     </>
                 ) : step === 2 ? (
                     <>
                         <TouchableOpacity
                             onPress={handleBack}
                             activeOpacity={0.8}
-                            style={{ paddingVertical: 15, paddingHorizontal: 28, borderRadius: 14, borderWidth: 1.5, borderColor: '#E5E7EB', backgroundColor: '#FFFFFF' }}
+                            style={{ paddingVertical: 15, paddingHorizontal: 28, borderRadius: RADII.md, borderWidth: 1.5, borderColor: COLORS.outlineVariant, backgroundColor: '#FFFFFF' }}
                         >
-                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: '#374151' }}>Back</Text>
+                            <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: COLORS.textPrimary }}>Back</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleNext} activeOpacity={0.85} style={{ flex: 1 }}>
+                        <PressableScale onPress={handleNext} style={{ flex: 1 }}>
                             <LinearGradient
-                                colors={['#3525CD', '#4F46E5']}
+                                colors={['#3525CD', COLORS.primary]}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 1 }}
-                                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 15, borderRadius: 14 }}
+                                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 15, borderRadius: RADII.md, ...SHADOWS.button }}
                             >
                                 <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 15, color: '#FFFFFF' }}>Next</Text>
                                 <Ionicons name="arrow-forward" size={18} color="#FFFFFF" />
                             </LinearGradient>
-                        </TouchableOpacity>
+                        </PressableScale>
                     </>
                 ) : (
-                    <View style={{ flex: 1, gap: 10 }}>
-                        <TouchableOpacity onPress={handleSubmit} disabled={isSubmitting || analysisMutation.isPending || !canGoNext()} activeOpacity={0.85}>
+                    <View style={{ flex: 1, gap: SPACING.md }}>
+                        <PressableScale onPress={handleSubmit} disabled={isSubmitting || analysisMutation.isPending || !canGoNext()}>
                             <LinearGradient
-                                colors={canGoNext() ? ['#3525CD', '#4F46E5'] : ['#D1D5DB', '#D1D5DB']}
+                                colors={canGoNext() ? ['#3525CD', COLORS.primary] : [COLORS.surfaceDim, COLORS.surfaceDim]}
                                 start={{ x: 0, y: 0 }}
                                 end={{ x: 1, y: 1 }}
                                 style={{
@@ -317,26 +319,22 @@ export default function NewDecisionScreen() {
                                     justifyContent: 'center',
                                     gap: 8,
                                     paddingVertical: 16,
-                                    borderRadius: 14,
-                                    shadowColor: '#4F46E5',
-                                    shadowOffset: { width: 0, height: 6 },
-                                    shadowOpacity: 0.22,
-                                    shadowRadius: 12,
-                                    elevation: 6,
+                                    borderRadius: RADII.md,
+                                    ...(canGoNext() ? SHADOWS.button : {}),
                                 }}
                             >
                                 {isSubmitting ? (
-                                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: '#FFFFFF' }}>{isEditMode ? 'Saving...' : 'Creating...'}</Text>
+                                    <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: canGoNext() ? '#FFFFFF' : COLORS.textSecondary }}>{isEditMode ? 'Saving...' : 'Creating...'}</Text>
                                 ) : (
                                     <>
-                                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: '#FFFFFF' }}>{isEditMode ? 'Save Changes' : 'Create Decision'}</Text>
-                                        <Ionicons name={isEditMode ? 'checkmark-circle' : 'sparkles'} size={18} color="#FFFFFF" />
+                                        <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: canGoNext() ? '#FFFFFF' : COLORS.textSecondary }}>{isEditMode ? 'Save Changes' : 'Create Decision'}</Text>
+                                        <Ionicons name={isEditMode ? 'checkmark-circle' : 'sparkles'} size={18} color={canGoNext() ? '#FFFFFF' : COLORS.textSecondary} />
                                     </>
                                 )}
                             </LinearGradient>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={handleBack} activeOpacity={0.8} style={{ paddingVertical: 14, alignItems: 'center' }}>
-                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 15, color: '#6B7280' }}>Back</Text>
+                        </PressableScale>
+                        <TouchableOpacity onPress={handleBack} activeOpacity={0.8} style={{ paddingVertical: SPACING.sm, alignItems: 'center' }}>
+                            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 15, color: COLORS.textSecondary }}>Back</Text>
                         </TouchableOpacity>
                     </View>
                 )}

@@ -1,11 +1,12 @@
 /**
- * AI Chat Screen — Streaming chat with the LifeOS Decision Advisor.
+ * AI Chat Screen — Premium Decision Advisor chat experience.
  *
  * Features:
- *  - Real-time streaming text (SSE)
- *  - Chat bubble UI with typing indicator
- *  - Session management (auto-create, switch)
- *  - Decision context linking
+ *  - Real-time streaming text (SSE) with animated cursor
+ *  - Premium chat bubble UI (user: indigo, advisor: white)
+ *  - "Personal decision intelligence" empty state — not a generic chatbot
+ *  - Session management (new chat, history)
+ *  - Decision context linking via decisionId param
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
@@ -28,7 +29,7 @@ import { aiService, type SSEEvent } from '@/services/aiService';
 import { useChatHistory, useInvalidateSessions } from '@/hooks/useAI';
 import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type DisplayMessage = {
     id: string;
@@ -38,7 +39,7 @@ type DisplayMessage = {
     createdAt: string;
 };
 
-// ─── Chat Bubble ─────────────────────────────────────────────────────────────
+// ─── Chat Bubble ──────────────────────────────────────────────────────────────
 
 const ChatBubble: React.FC<{ message: DisplayMessage }> = ({ message }) => {
     const isUser = message.role === 'user';
@@ -47,19 +48,40 @@ const ChatBubble: React.FC<{ message: DisplayMessage }> = ({ message }) => {
         <View
             style={{
                 alignSelf: isUser ? 'flex-end' : 'flex-start',
-                maxWidth: '82%',
+                maxWidth: '84%',
                 marginBottom: SPACING.md,
-                marginHorizontal: SPACING.lg,
+                marginHorizontal: SPACING.xl,
             }}
         >
+            {/* Advisor label */}
             {!isUser && (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                    <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' }}>
-                        <Ionicons name="sparkles" size={12} color={COLORS.textOnPrimary} />
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+                    <View
+                        style={{
+                            width: 20,
+                            height: 20,
+                            borderRadius: 10,
+                            backgroundColor: COLORS.primary,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Ionicons name="sparkles" size={10} color="#FFFFFF" />
                     </View>
-                    <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: COLORS.textSecondary }}>LifeOS Advisor</Text>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter_600SemiBold',
+                            fontSize: 11,
+                            color: COLORS.textSecondary,
+                            letterSpacing: 0.2,
+                        }}
+                    >
+                        LifeOS Advisor
+                    </Text>
                 </View>
             )}
+
+            {/* Bubble */}
             <View
                 style={{
                     backgroundColor: isUser ? COLORS.primary : COLORS.surfaceLowest,
@@ -67,21 +89,30 @@ const ChatBubble: React.FC<{ message: DisplayMessage }> = ({ message }) => {
                     borderTopRightRadius: isUser ? 4 : 18,
                     borderTopLeftRadius: isUser ? 18 : 4,
                     paddingHorizontal: SPACING.lg,
-                    paddingVertical: SPACING.md,
-                    shadowColor: 'rgba(0,0,0,0.5)',
-                    shadowOffset: { width: 0, height: 1 },
-                    shadowOpacity: isUser ? 0.1 : 0.04,
-                    shadowRadius: 6,
-                    elevation: isUser ? 2 : 1,
+                    paddingVertical: 12,
+                    ...(isUser
+                        ? SHADOWS.button
+                        : { ...SHADOWS.card }),
                 }}
             >
                 <Text
-                    style={[TYPOGRAPHY.bodyLarge, { color: isUser ? COLORS.textOnPrimary : COLORS.textPrimary }]}
+                    style={{
+                        fontFamily: 'Inter_400Regular',
+                        fontSize: 15,
+                        lineHeight: 23,
+                        color: isUser ? '#FFFFFF' : COLORS.textPrimary,
+                    }}
                 >
                     {message.content}
-                    {message.isStreaming && '\u258A'}
+                    {message.isStreaming && (
+                        <Text style={{ color: isUser ? 'rgba(255,255,255,0.7)' : COLORS.primary }}>
+                            {' ▊'}
+                        </Text>
+                    )}
                 </Text>
             </View>
+
+            {/* Timestamp */}
             <Text
                 style={{
                     fontFamily: 'Inter_400Regular',
@@ -98,51 +129,168 @@ const ChatBubble: React.FC<{ message: DisplayMessage }> = ({ message }) => {
     );
 };
 
-// ─── Typing Indicator ────────────────────────────────────────────────────────
+// ─── Typing Indicator ─────────────────────────────────────────────────────────
 
 const TypingIndicator: React.FC = () => (
-    <View style={{ alignSelf: 'flex-start', marginHorizontal: SPACING.lg, marginBottom: SPACING.md }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-            <View style={{ width: 22, height: 22, borderRadius: 11, backgroundColor: COLORS.primary, alignItems: 'center', justifyContent: 'center' }}>
-                <Ionicons name="sparkles" size={12} color={COLORS.textOnPrimary} />
+    <View style={{ alignSelf: 'flex-start', marginHorizontal: SPACING.xl, marginBottom: SPACING.md }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 5 }}>
+            <View
+                style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 10,
+                    backgroundColor: COLORS.primary,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Ionicons name="sparkles" size={10} color="#FFFFFF" />
             </View>
-            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: COLORS.textSecondary }}>LifeOS Advisor</Text>
+            <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: COLORS.textSecondary }}>
+                LifeOS Advisor
+            </Text>
         </View>
-        <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: 18, borderTopLeftRadius: 4, paddingHorizontal: SPACING.xl, paddingVertical: SPACING.md, flexDirection: 'row', gap: 4, ...SHADOWS.card }}>
+        <View
+            style={{
+                backgroundColor: COLORS.surfaceLowest,
+                borderRadius: 18,
+                borderTopLeftRadius: 4,
+                paddingHorizontal: SPACING.lg,
+                paddingVertical: 12,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: SPACING.sm,
+                ...SHADOWS.card,
+            }}
+        >
             <ActivityIndicator size="small" color={COLORS.primary} />
-            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textSecondary, marginLeft: 6 }}>Thinking...</Text>
+            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textSecondary }}>
+                Analyzing your history...
+            </Text>
         </View>
     </View>
 );
 
-// ─── Empty State ─────────────────────────────────────────────────────────────
+// ─── Empty State ──────────────────────────────────────────────────────────────
+
+const SUGGESTIONS = [
+    'What patterns do you see in my decisions?',
+    'Should I trust my confidence levels?',
+    'Where do I tend to have regrets?',
+];
 
 const EmptyState: React.FC<{ onSuggestionPress: (text: string) => void }> = ({ onSuggestionPress }) => (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40, paddingBottom: 100 }}>
-        <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: COLORS.primaryFixed, alignItems: 'center', justifyContent: 'center', marginBottom: SPACING.xl }}>
-            <Ionicons name="sparkles" size={32} color={COLORS.primary} />
+    <View style={{ flex: 1, justifyContent: 'center', paddingHorizontal: SPACING.xxl, paddingBottom: 80 }}>
+        {/* Icon */}
+        <View style={{ alignItems: 'center', marginBottom: SPACING.xl }}>
+            <View
+                style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 32,
+                    backgroundColor: COLORS.primarySurface,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: SPACING.lg,
+                }}
+            >
+                <Ionicons name="sparkles" size={28} color={COLORS.primary} />
+            </View>
+            <Text
+                style={{
+                    fontFamily: 'Inter_800ExtraBold',
+                    fontSize: 22,
+                    color: COLORS.textPrimary,
+                    letterSpacing: -0.5,
+                    textAlign: 'center',
+                    marginBottom: SPACING.sm,
+                }}
+            >
+                Decision Advisor
+            </Text>
+            <Text
+                style={{
+                    fontFamily: 'Inter_400Regular',
+                    fontSize: 14,
+                    color: COLORS.textSecondary,
+                    textAlign: 'center',
+                    lineHeight: 21,
+                }}
+            >
+                Powered by your personal decision history, patterns, and outcomes.
+            </Text>
         </View>
-        <Text style={[TYPOGRAPHY.h2, { color: COLORS.textPrimary, textAlign: 'center', marginBottom: SPACING.sm }]}>
-            Decision Advisor
-        </Text>
-        <Text style={[TYPOGRAPHY.body, { color: COLORS.textSecondary, textAlign: 'center' }]}>
-            Ask me anything about your decisions. I'll use your history, patterns, and past outcomes to give personalized advice.
-        </Text>
-        <View style={{ marginTop: SPACING.xxl, gap: SPACING.sm, width: '100%' }}>
+
+        {/* Context pipeline explanation */}
+        <View
+            style={{
+                backgroundColor: COLORS.surfaceLowest,
+                borderRadius: RADII.xl,
+                padding: SPACING.xl,
+                marginBottom: SPACING.xxl,
+                ...SHADOWS.card,
+            }}
+        >
+            <Text style={[TYPOGRAPHY.caption, { color: COLORS.textMuted, marginBottom: SPACING.md }]}>
+                What the AI considers
+            </Text>
             {[
-                'Should I invest in this opportunity?',
-                'Am I being impulsive with this purchase?',
-                'What patterns do you see in my decisions?',
-            ].map((suggestion, i) => (
-                <TouchableOpacity key={i} onPress={() => onSuggestionPress(suggestion)} activeOpacity={0.7} style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.md, padding: SPACING.md, borderWidth: 1, borderColor: COLORS.surfaceLow }}>
-                    <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.primary }}>{suggestion}</Text>
-                </TouchableOpacity>
+                { icon: 'person-outline' as const, label: 'Your decision profile & traits' },
+                { icon: 'trending-up-outline' as const, label: 'Category history & patterns' },
+                { icon: 'layers-outline' as const, label: 'Similar past decisions (semantic)' },
+                { icon: 'bulb-outline' as const, label: 'Detected behavioral patterns' },
+            ].map((item, i) => (
+                <View key={i} style={{ flexDirection: 'row', alignItems: 'center', gap: SPACING.md, marginBottom: i < 3 ? SPACING.sm : 0 }}>
+                    <View
+                        style={{
+                            width: 28,
+                            height: 28,
+                            borderRadius: 8,
+                            backgroundColor: COLORS.primarySurface,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Ionicons name={item.icon} size={14} color={COLORS.primary} />
+                    </View>
+                    <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textBody }}>
+                        {item.label}
+                    </Text>
+                </View>
             ))}
         </View>
+
+        {/* Suggestion chips */}
+        <Text style={[TYPOGRAPHY.label, { color: COLORS.textMuted, marginBottom: SPACING.md }]}>
+            Try asking
+        </Text>
+        {SUGGESTIONS.map((suggestion, i) => (
+            <TouchableOpacity
+                key={i}
+                onPress={() => onSuggestionPress(suggestion)}
+                activeOpacity={0.7}
+                style={{
+                    backgroundColor: COLORS.surfaceLowest,
+                    borderRadius: RADII.md,
+                    padding: SPACING.md,
+                    marginBottom: SPACING.sm,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderWidth: 1,
+                    borderColor: COLORS.surfaceDim,
+                }}
+            >
+                <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.primary, flex: 1 }}>
+                    {suggestion}
+                </Text>
+                <Ionicons name="arrow-forward" size={14} color={COLORS.primary} />
+            </TouchableOpacity>
+        ))}
     </View>
 );
 
-// ─── Main Screen ─────────────────────────────────────────────────────────────
+// ─── Main Screen ──────────────────────────────────────────────────────────────
 
 export default function AiChatScreen() {
     const router = useRouter();
@@ -159,8 +307,6 @@ export default function AiChatScreen() {
 
     const flatListRef = useRef<FlatList>(null);
     const invalidateSessions = useInvalidateSessions();
-
-    // Use ref to avoid stale closure in handleSend
     const inputRef = useRef(input);
     useEffect(() => { inputRef.current = input; }, [input]);
     const isLoadingRef = useRef(isLoading);
@@ -168,7 +314,6 @@ export default function AiChatScreen() {
     const isStreamingRef = useRef(isStreaming);
     useEffect(() => { isStreamingRef.current = isStreaming; }, [isStreaming]);
 
-    // Load existing session if provided
     const { data: existingSession } = useChatHistory(paramSessionId || '');
 
     useEffect(() => {
@@ -187,21 +332,17 @@ export default function AiChatScreen() {
     }, [existingSession, paramSessionId]);
 
     const scrollToBottom = useCallback(() => {
-        setTimeout(() => {
-            flatListRef.current?.scrollToEnd({ animated: true });
-        }, 100);
+        setTimeout(() => { flatListRef.current?.scrollToEnd({ animated: true }); }, 100);
     }, []);
 
     const handleSend = useCallback(async (textOverride?: string) => {
-        const currentInput = inputRef.current;
         if (isLoadingRef.current || isStreamingRef.current) return;
-        const trimmed = (textOverride || currentInput).trim();
+        const trimmed = (textOverride || inputRef.current).trim();
         if (!trimmed) return;
 
         Keyboard.dismiss();
         if (!textOverride) setInput('');
 
-        // Add user message to UI
         const userMsg: DisplayMessage = {
             id: `user-${Date.now()}`,
             role: 'user',
@@ -211,24 +352,19 @@ export default function AiChatScreen() {
         setMessages((prev) => [...prev, userMsg]);
         scrollToBottom();
 
-        // Add placeholder for assistant
         const assistantId = `assistant-${Date.now()}`;
         setIsLoading(true);
 
         try {
-            let sessionEstablished = false;
-
             await aiService.sendChatMessage(
                 {
                     sessionId: currentSessionId,
                     message: trimmed,
                     decisionId: decisionId || undefined,
                 },
-                // onEvent
                 (event: SSEEvent) => {
                     if (event.type === 'session') {
                         setCurrentSessionId(event.sessionId);
-                        sessionEstablished = true;
                     } else if (event.type === 'delta') {
                         setIsLoading(false);
                         setIsStreaming(true);
@@ -238,7 +374,7 @@ export default function AiChatScreen() {
                                 return prev.map((m) =>
                                     m.id === assistantId
                                         ? { ...m, content: m.content + event.text, isStreaming: true }
-                                        : m,
+                                        : m
                                 );
                             }
                             return [
@@ -256,12 +392,11 @@ export default function AiChatScreen() {
                     } else if (event.type === 'done') {
                         setMessages((prev) =>
                             prev.map((m) =>
-                                m.id === assistantId ? { ...m, isStreaming: false } : m,
-                            ),
+                                m.id === assistantId ? { ...m, isStreaming: false } : m
+                            )
                         );
                     }
                 },
-                // onError
                 (err) => {
                     console.error('Chat error:', err);
                     setMessages((prev) => [
@@ -274,7 +409,6 @@ export default function AiChatScreen() {
                         },
                     ]);
                 },
-                // onComplete
                 () => {
                     setIsLoading(false);
                     setIsStreaming(false);
@@ -282,21 +416,19 @@ export default function AiChatScreen() {
                     scrollToBottom();
                 },
             );
-        } catch (err) {
+        } catch {
             setIsLoading(false);
             setIsStreaming(false);
         }
     }, [currentSessionId, decisionId, scrollToBottom, invalidateSessions]);
-
-    const handleSendDirect = useCallback((text: string) => {
-        handleSend(text);
-    }, [handleSend]);
 
     const handleNewChat = () => {
         setMessages([]);
         setCurrentSessionId(undefined);
         setInput('');
     };
+
+    const canSend = input.trim().length > 0 && !isLoading && !isStreaming;
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.surface }}>
@@ -311,41 +443,80 @@ export default function AiChatScreen() {
                     paddingHorizontal: SPACING.lg,
                     paddingVertical: SPACING.md,
                     borderBottomWidth: 1,
-                    borderBottomColor: '#F0F0F0',
-                    backgroundColor: COLORS.surface,
+                    borderBottomColor: COLORS.surfaceDim,
+                    backgroundColor: COLORS.surfaceLowest,
                 }}
             >
-                <TouchableOpacity onPress={() => router.push('/(tabs)/ai/history')} style={{ padding: SPACING.sm }}>
+                <TouchableOpacity
+                    onPress={() => router.push('/(tabs)/ai/history')}
+                    style={{ padding: SPACING.sm }}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    accessibilityLabel="Chat history"
+                    accessibilityRole="button"
+                >
                     <Ionicons name="time-outline" size={22} color={COLORS.textMuted} />
                 </TouchableOpacity>
+
                 <View style={{ alignItems: 'center' }}>
-                    <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary }]}>AI Advisor</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+                        <View
+                            style={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: 10,
+                                backgroundColor: COLORS.primary,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Ionicons name="sparkles" size={10} color="#FFFFFF" />
+                        </View>
+                        <Text
+                            style={{
+                                fontFamily: 'Inter_700Bold',
+                                fontSize: 16,
+                                color: COLORS.textPrimary,
+                            }}
+                        >
+                            AI Advisor
+                        </Text>
+                    </View>
                     {currentSessionId && (
                         <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 10, color: '#9CA3AF' }}>
                             Session active
                         </Text>
                     )}
                 </View>
-                <TouchableOpacity onPress={handleNewChat} style={{ padding: SPACING.sm }}>
+
+                <TouchableOpacity
+                    onPress={handleNewChat}
+                    style={{ padding: SPACING.sm }}
+                    hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                    accessibilityLabel="New conversation"
+                    accessibilityRole="button"
+                >
                     <Ionicons name="add-circle-outline" size={22} color={COLORS.primary} />
                 </TouchableOpacity>
             </View>
 
-            {/* ── Messages ── */}
+            {/* ── Messages or empty state ── */}
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 keyboardVerticalOffset={90}
             >
                 {messages.length === 0 && !isLoading ? (
-                    <EmptyState onSuggestionPress={handleSendDirect} />
+                    <EmptyState onSuggestionPress={(text) => handleSend(text)} />
                 ) : (
                     <FlatList
                         ref={flatListRef}
                         data={messages}
                         keyExtractor={(item) => item.id}
                         renderItem={({ item }) => <ChatBubble message={item} />}
-                        contentContainerStyle={{ paddingTop: SPACING.lg, paddingBottom: SPACING.sm }}
+                        contentContainerStyle={{
+                            paddingTop: SPACING.xl,
+                            paddingBottom: SPACING.sm,
+                        }}
                         showsVerticalScrollIndicator={false}
                         onContentSizeChange={scrollToBottom}
                         ListFooterComponent={isLoading ? <TypingIndicator /> : null}
@@ -358,11 +529,11 @@ export default function AiChatScreen() {
                         flexDirection: 'row',
                         alignItems: 'flex-end',
                         paddingHorizontal: SPACING.md,
-                        paddingVertical: 10,
-                        paddingBottom: 14,
+                        paddingVertical: SPACING.md,
+                        paddingBottom: 18,
                         backgroundColor: COLORS.surfaceLowest,
                         borderTopWidth: 1,
-                        borderTopColor: '#F0F0F0',
+                        borderTopColor: COLORS.surfaceDim,
                         gap: SPACING.sm,
                     }}
                 >
@@ -371,15 +542,20 @@ export default function AiChatScreen() {
                             flex: 1,
                             backgroundColor: COLORS.surface,
                             borderRadius: 22,
-                            paddingHorizontal: 18,
-                            paddingVertical: Platform.OS === 'ios' ? 12 : 8,
+                            paddingHorizontal: SPACING.lg,
+                            paddingVertical: Platform.OS === 'ios' ? 11 : 8,
                             maxHeight: 120,
-                            borderWidth: 1,
-                            borderColor: COLORS.surfaceDim,
+                            borderWidth: 1.5,
+                            borderColor: COLORS.outlineVariant,
                         }}
                     >
                         <TextInput
-                            style={[TYPOGRAPHY.bodyLarge, { maxHeight: 100, color: COLORS.textPrimary }]}
+                            style={{
+                                fontFamily: 'Inter_400Regular',
+                                fontSize: 15,
+                                color: COLORS.textPrimary,
+                                maxHeight: 100,
+                            }}
                             placeholder="Ask about your decisions..."
                             placeholderTextColor="#9CA3AF"
                             value={input}
@@ -387,27 +563,27 @@ export default function AiChatScreen() {
                             multiline
                             returnKeyType="default"
                             editable={!isStreaming}
+                            accessibilityLabel="Chat input"
                         />
                     </View>
+
                     <TouchableOpacity
                         onPress={() => handleSend()}
-                        disabled={!input.trim() || isLoading || isStreaming}
+                        disabled={!canSend}
                         activeOpacity={0.8}
                         style={{
-                            minWidth: 44,
-                            minHeight: 44,
+                            width: 44,
+                            height: 44,
                             borderRadius: 22,
-                            backgroundColor: input.trim() && !isLoading && !isStreaming ? COLORS.primary : COLORS.inputBorder,
+                            backgroundColor: canSend ? COLORS.primary : COLORS.surfaceDim,
                             alignItems: 'center',
                             justifyContent: 'center',
-                            shadowColor: COLORS.primary,
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: input.trim() ? 0.2 : 0,
-                            shadowRadius: 6,
-                            elevation: input.trim() ? 3 : 0,
+                            ...(canSend ? SHADOWS.button : {}),
                         }}
+                        accessibilityLabel="Send message"
+                        accessibilityRole="button"
                     >
-                        <Ionicons name="send" size={18} color={COLORS.textOnPrimary} style={{ marginLeft: 2 }} />
+                        <Ionicons name="send" size={18} color="#FFFFFF" style={{ marginLeft: 2 }} />
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
@@ -415,12 +591,11 @@ export default function AiChatScreen() {
     );
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function formatTime(dateStr: string): string {
     try {
-        const date = new Date(dateStr);
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return new Date(dateStr).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } catch {
         return '';
     }

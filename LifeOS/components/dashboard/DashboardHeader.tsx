@@ -1,11 +1,14 @@
 /**
- * DashboardHeader — App logo and avatar
+ * DashboardHeader — Premium app header with logo and profile avatar.
+ * Features a thin top border for depth and a refined wordmark.
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import { COLORS, SPACING } from '@/utils/designTokens';
+import { Ionicons } from '@expo/vector-icons';
+import { PressableScale } from '@/components/ui';
+import { COLORS, SPACING, SHADOWS } from '@/utils/designTokens';
 
 type DashboardHeaderProps = {
     firstName?: string;
@@ -13,6 +16,8 @@ type DashboardHeaderProps = {
 
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ firstName }) => {
     const router = useRouter();
+    const initial = firstName ? firstName.charAt(0).toUpperCase() : '?';
+
     return (
         <View
             style={{
@@ -20,37 +25,66 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ firstName }) =
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 paddingHorizontal: SPACING.xxl,
-                paddingTop: SPACING.sm,
-                paddingBottom: SPACING.xl,
+                paddingTop: SPACING.md,
+                paddingBottom: SPACING.lg,
+                backgroundColor: COLORS.surface,
             }}
         >
-            <Text
-                style={{
-                    fontFamily: 'Inter_800ExtraBold',
-                    fontSize: 20,
-                    color: COLORS.textPrimary,
-                    letterSpacing: -0.5,
-                }}
-            >
-                LifeOS
-            </Text>
-            <TouchableOpacity
+            {/* Wordmark */}
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View
+                    style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
+                        backgroundColor: COLORS.primary,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Ionicons name="layers" size={15} color="#FFFFFF" />
+                </View>
+                <Text
+                    style={{
+                        fontFamily: 'Inter_800ExtraBold',
+                        fontSize: 18,
+                        color: COLORS.textPrimary,
+                        letterSpacing: -0.5,
+                    }}
+                >
+                    LifeOS
+                </Text>
+            </View>
+
+            {/* Profile avatar */}
+            <PressableScale
                 onPress={() => router.push('/(tabs)/profile')}
-                style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 19,
-                    backgroundColor: COLORS.primaryFixed,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                }}
                 accessibilityLabel="View profile"
                 accessibilityRole="button"
             >
-                <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 14, color: COLORS.primary }}>
-                    {firstName ? firstName.charAt(0).toUpperCase() : '?'}
-                </Text>
-            </TouchableOpacity>
+                <View
+                    style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 18,
+                        backgroundColor: COLORS.primary,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        ...SHADOWS.card,
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontFamily: 'Inter_700Bold',
+                            fontSize: 14,
+                            color: COLORS.textOnPrimary,
+                            letterSpacing: 0.5,
+                        }}
+                    >
+                        {initial}
+                    </Text>
+                </View>
+            </PressableScale>
         </View>
     );
 };
