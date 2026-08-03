@@ -165,7 +165,6 @@ export default function CheckinScreen() {
                             fontSize: 15,
                             color: COLORS.textPrimary,
                             lineHeight: 22,
-                            ...SHADOWS.card,
                         }}
                     />
 
@@ -187,7 +186,6 @@ export default function CheckinScreen() {
                             fontSize: 15,
                             color: COLORS.textPrimary,
                             lineHeight: 22,
-                            ...SHADOWS.card,
                         }}
                     />
 
@@ -209,7 +207,6 @@ export default function CheckinScreen() {
                             fontSize: 15,
                             color: COLORS.textPrimary,
                             lineHeight: 22,
-                            ...SHADOWS.card,
                         }}
                     />
 
