@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { View, Text } from 'react-native';
+import { COLORS, TYPOGRAPHY } from '@/utils/designTokens';
 
 type StepIndicatorProps = {
     step: number;
@@ -27,7 +28,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ step, total }) => 
                 style={{
                     fontFamily: 'Inter_700Bold',
                     fontSize: 11,
-                    color: '#4F46E5',
+                    color: COLORS.primary,
                     letterSpacing: 1.2,
                     textTransform: 'uppercase',
                     marginBottom: 6,
@@ -47,7 +48,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ step, total }) => 
                     style={{
                         fontFamily: 'Inter_800ExtraBold',
                         fontSize: 28,
-                        color: '#111827',
+                        color: COLORS.textPrimary,
                         letterSpacing: -1,
                         lineHeight: 34,
                         flex: 1,
@@ -59,7 +60,7 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ step, total }) => 
                     style={{
                         fontFamily: 'Inter_500Medium',
                         fontSize: 13,
-                        color: '#6B7280',
+                        color: COLORS.textSecondary,
                         textAlign: 'right',
                         lineHeight: 18,
                     }}
@@ -68,12 +69,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ step, total }) => 
                 </Text>
             </View>
             {/* Progress bar */}
-            <View style={{ height: 4, backgroundColor: '#E5E7EB', borderRadius: 2 }}>
+            <View style={{ height: 4, backgroundColor: COLORS.surfaceDim, borderRadius: 2 }}>
                 <View
                     style={{
                         height: 4,
                         borderRadius: 2,
-                        backgroundColor: '#4F46E5',
+                        backgroundColor: COLORS.primary,
                         width: `${progress * 100}%`,
                     }}
                 />
@@ -87,14 +88,10 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({ step, total }) => 
  */
 export const SectionLabel: React.FC<{ text: string }> = ({ text }) => (
     <Text
-        style={{
-            fontFamily: 'Inter_700Bold',
-            fontSize: 10,
-            color: '#464555',
-            letterSpacing: 1.5,
-            textTransform: 'uppercase',
-            marginBottom: 10,
-        }}
+        style={[
+            TYPOGRAPHY.caption,
+            { color: COLORS.textMuted, marginBottom: 10 }
+        ]}
     >
         {text}
     </Text>

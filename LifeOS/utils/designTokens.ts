@@ -103,6 +103,11 @@ export const TYPOGRAPHY: Record<string, TextStyle> = {
     fontSize: 13,
     lineHeight: 18,
   },
+  bodyBold: {
+    fontFamily: 'Inter_600SemiBold',
+    fontSize: 13,
+    lineHeight: 18,
+  },
   bodySmall: {
     fontFamily: 'Inter_500Medium',
     fontSize: 12,
@@ -132,29 +137,48 @@ export const TYPOGRAPHY: Record<string, TextStyle> = {
     fontFamily: 'Inter_700Bold',
     fontSize: 16,
   },
+  numericLarge: {
+    fontFamily: 'Inter_800ExtraBold',
+    fontSize: 36,
+    lineHeight: 40,
+    letterSpacing: -1,
+  },
+  numericMedium: {
+    fontFamily: 'Inter_800ExtraBold',
+    fontSize: 24,
+    lineHeight: 28,
+    letterSpacing: -0.5,
+  },
 };
 
 // ─── Shadows ─────────────────────────────────────────────────────────
 export const SHADOWS: Record<string, ViewStyle> = {
   card: {
-    shadowColor: 'rgba(25,28,29,0.8)',
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: 'rgba(17,24,39,1)',
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04,
-    shadowRadius: 12,
+    shadowRadius: 8,
     elevation: 2,
   },
-  elevated: {
-    shadowColor: 'rgba(25,28,29,0.8)',
-    shadowOffset: { width: 0, height: 4 },
+  cardMedium: {
+    shadowColor: 'rgba(17,24,39,1)',
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 3,
+  },
+  elevated: {
+    shadowColor: 'rgba(17,24,39,1)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
     shadowRadius: 16,
     elevation: 4,
   },
   button: {
     shadowColor: '#4F46E5',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowOpacity: 0.28,
+    shadowRadius: 10,
     elevation: 4,
   },
   fab: {

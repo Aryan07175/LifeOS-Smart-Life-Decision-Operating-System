@@ -64,16 +64,46 @@ export default function DecisionListScreen() {
             <StatusBar barStyle="dark-content" backgroundColor={COLORS.surface} />
 
             {/* ── Header ── */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: SPACING.xxl, paddingTop: SPACING.sm, paddingBottom: SPACING.lg }}>
-                <Text style={[TYPOGRAPHY.h1, { color: COLORS.textPrimary }]}>My Decisions</Text>
-                <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 12, backgroundColor: COLORS.surfaceLowest, alignItems: 'center', justifyContent: 'center', ...SHADOWS.card }}>
-                    <Ionicons name="options-outline" size={20} color={COLORS.textMuted} />
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', paddingHorizontal: SPACING.xxl, paddingTop: SPACING.lg, paddingBottom: SPACING.lg }}>
+                <View>
+                    <Text
+                        style={{
+                            fontFamily: 'Inter_800ExtraBold',
+                            fontSize: 28,
+                            color: COLORS.textPrimary,
+                            letterSpacing: -0.8,
+                            lineHeight: 34,
+                        }}
+                    >
+                        Decisions
+                    </Text>
+                    {decisions.length > 0 && (
+                        <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textSecondary, marginTop: 2 }}>
+                            {decisions.length} total
+                        </Text>
+                    )}
+                </View>
+                <TouchableOpacity
+                    onPress={handleNew}
+                    style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 12,
+                        backgroundColor: COLORS.primary,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        ...SHADOWS.button,
+                    }}
+                    accessibilityLabel="New decision"
+                    accessibilityRole="button"
+                >
+                    <Ionicons name="add" size={22} color="#FFFFFF" />
                 </TouchableOpacity>
             </View>
 
             {/* ── Search Bar ── */}
-            <View style={{ paddingHorizontal: SPACING.xl, marginBottom: SPACING.md }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.md, paddingHorizontal: SPACING.md, height: 48, ...SHADOWS.card }}>
+            <View style={{ paddingHorizontal: SPACING.xxl, marginBottom: SPACING.md }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.md, paddingHorizontal: SPACING.md, height: 46, borderWidth: 1.5, borderColor: COLORS.outlineVariant }}>
                     <Ionicons name="search-outline" size={18} color="#9CA3AF" />
                     <TextInput
                         value={searchQuery}

@@ -6,6 +6,8 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SectionLabel } from './StepIndicator';
+import { PressableScale } from '@/components/ui';
+import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 import { MOTIVATIONAL_QUOTES } from '@/utils/constants';
 import type { WizardState, WizardAction } from './wizardReducer';
 
@@ -21,68 +23,63 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                 <SectionLabel text="Expected Metrics" />
                 <TouchableOpacity onPress={() => dispatch({ type: 'ADD_METRIC' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                    <Ionicons name="add" size={16} color="#4F46E5" />
-                    <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: '#4F46E5' }}>Add Metric</Text>
+                    <Ionicons name="add" size={16} color={COLORS.primary} />
+                    <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: COLORS.primary }}>Add Metric</Text>
                 </TouchableOpacity>
             </View>
 
             {state.expectedOutcomes.length === 0 ? (
-                <TouchableOpacity
+                <PressableScale
                     onPress={() => dispatch({ type: 'ADD_METRIC' })}
-                    activeOpacity={0.7}
                     style={{
-                        backgroundColor: '#F3F4F6',
-                        borderRadius: 16,
-                        padding: 24,
+                        backgroundColor: COLORS.surfaceLowest,
+                        borderRadius: RADII.lg,
+                        padding: SPACING.xxl,
                         alignItems: 'center',
                         borderWidth: 1.5,
-                        borderColor: '#E5E7EB',
+                        borderColor: COLORS.outlineVariant,
                         borderStyle: 'dashed',
                     }}
                 >
-                    <Ionicons name="stats-chart-outline" size={28} color="#C7C4D8" style={{ marginBottom: 8 }} />
-                    <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: '#6B7280' }}>
+                    <Ionicons name="stats-chart-outline" size={28} color={COLORS.textMuted} style={{ marginBottom: 8 }} />
+                    <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 14, color: COLORS.textSecondary }}>
                         Add expected metrics to track progress
                     </Text>
-                </TouchableOpacity>
+                </PressableScale>
             ) : (
                 state.expectedOutcomes.map((metric, i) => (
                     <View
                         key={i}
                         style={{
-                            backgroundColor: '#FFFFFF',
-                            borderRadius: 16,
-                            padding: 16,
-                            marginBottom: 10,
-                            shadowColor: 'rgba(0,0,0,0.5)',
-                            shadowOffset: { width: 0, height: 2 },
-                            shadowOpacity: 0.03,
-                            shadowRadius: 6,
-                            elevation: 1,
+                            backgroundColor: COLORS.surfaceLowest,
+                            borderRadius: RADII.lg,
+                            padding: SPACING.lg,
+                            marginBottom: SPACING.sm,
+                            ...SHADOWS.card,
                         }}
                     >
                         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: '#E8E6FF', alignItems: 'center', justifyContent: 'center' }}>
-                                <Ionicons name="trending-up" size={16} color="#4F46E5" />
+                            <View style={{ width: 36, height: 36, borderRadius: 12, backgroundColor: COLORS.primarySurface, alignItems: 'center', justifyContent: 'center' }}>
+                                <Ionicons name="trending-up" size={16} color={COLORS.primary} />
                             </View>
                             <View style={{ flex: 1 }}>
                                 <TextInput
                                     value={metric.outcome}
                                     onChangeText={(v) => dispatch({ type: 'UPDATE_METRIC', index: i, field: 'outcome', value: v })}
                                     placeholder="Metric name (e.g. Revenue Growth)"
-                                    placeholderTextColor="#C7C4D8"
-                                    style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: '#464555', letterSpacing: 0.5, textTransform: 'uppercase', paddingVertical: 2 }}
+                                    placeholderTextColor={COLORS.textMuted}
+                                    style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: COLORS.textSecondary, letterSpacing: 0.5, textTransform: 'uppercase', paddingVertical: 2 }}
                                 />
                                 <TextInput
                                     value={metric.targetValue}
                                     onChangeText={(v) => dispatch({ type: 'UPDATE_METRIC', index: i, field: 'targetValue', value: v })}
                                     placeholder="Target (e.g. 15% Quarterly)"
-                                    placeholderTextColor="#C7C4D8"
-                                    style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: '#111827', paddingVertical: 2 }}
+                                    placeholderTextColor={COLORS.textMuted}
+                                    style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: COLORS.textPrimary, paddingVertical: 2 }}
                                 />
                             </View>
                             <TouchableOpacity onPress={() => dispatch({ type: 'REMOVE_METRIC', index: i })} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-                                <Ionicons name="trash-outline" size={18} color="#EF4444" />
+                                <Ionicons name="trash-outline" size={18} color={COLORS.danger} />
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -93,18 +90,18 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
         {/* Target Date */}
         <View>
             <SectionLabel text="Target Date" />
-            <View style={{ backgroundColor: '#F3F4F6', borderRadius: 16, padding: 16 }}>
+            <View style={{ backgroundColor: COLORS.surfaceLowest, borderRadius: RADII.lg, padding: SPACING.xl, ...SHADOWS.card }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
                         value={state.expectedOutcomeDate}
                         onChangeText={(v) => dispatch({ type: 'SET_FIELD', field: 'expectedOutcomeDate', value: v })}
                         placeholder="MM/DD/YYYY"
-                        placeholderTextColor="#C7C4D8"
-                        style={{ flex: 1, fontFamily: 'Inter_500Medium', fontSize: 16, color: '#111827', paddingVertical: 4 }}
+                        placeholderTextColor={COLORS.textMuted}
+                        style={{ flex: 1, fontFamily: 'Inter_500Medium', fontSize: 16, color: COLORS.textPrimary, paddingVertical: 4 }}
                     />
-                    <Ionicons name="calendar-outline" size={20} color="#6B7280" />
+                    <Ionicons name="calendar-outline" size={20} color={COLORS.textSecondary} />
                 </View>
-                <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 13, color: '#9CA3AF', marginTop: 8, lineHeight: 18 }}>
+                <Text style={{ fontFamily: 'Inter_400Regular', fontSize: 13, color: COLORS.textSecondary, marginTop: 8, lineHeight: 18 }}>
                     When do you expect these outcomes to be fully realized?
                 </Text>
             </View>
@@ -114,7 +111,7 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
         <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <SectionLabel text="Confidence" />
-                <View style={{ backgroundColor: '#4F46E5', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 }}>
+                <View style={{ backgroundColor: COLORS.primary, borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 }}>
                     <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 13, color: '#FFFFFF' }}>{state.confidenceLevel} / 10</Text>
                 </View>
             </View>
@@ -128,20 +125,20 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
                             flex: 1,
                             height: 8,
                             borderRadius: 4,
-                            backgroundColor: level <= state.confidenceLevel ? '#4F46E5' : '#E5E7EB',
+                            backgroundColor: level <= state.confidenceLevel ? COLORS.primary : COLORS.surfaceDim,
                         }}
                     />
                 ))}
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: '#9CA3AF', letterSpacing: 0.5, textTransform: 'uppercase' }}>
+                <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 11, color: COLORS.textMuted, letterSpacing: 0.5, textTransform: 'uppercase' }}>
                     Tentative
                 </Text>
                 <Text
                     style={{
                         fontFamily: 'Inter_700Bold',
                         fontSize: 11,
-                        color: state.confidenceLevel >= 7 ? '#4F46E5' : '#9CA3AF',
+                        color: state.confidenceLevel >= 7 ? COLORS.primary : COLORS.textMuted,
                         letterSpacing: 0.5,
                         textTransform: 'uppercase',
                     }}
@@ -152,9 +149,9 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
         </View>
 
         {/* Motivational footer */}
-        <View style={{ backgroundColor: '#E8E6FF', borderRadius: 20, padding: 24, alignItems: 'center' }}>
-            <Ionicons name="bulb-outline" size={28} color="#4F46E5" style={{ marginBottom: 12, opacity: 0.6 }} />
-            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: '#464555', textAlign: 'center', fontStyle: 'italic', lineHeight: 22 }}>
+        <View style={{ backgroundColor: COLORS.primarySurface, borderRadius: RADII.xl, padding: SPACING.xxl, alignItems: 'center' }}>
+            <Ionicons name="bulb-outline" size={28} color={COLORS.primary} style={{ marginBottom: 12, opacity: 0.6 }} />
+            <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 14, color: COLORS.primary, textAlign: 'center', fontStyle: 'italic', lineHeight: 22 }}>
                 "{MOTIVATIONAL_QUOTES[2]}"
             </Text>
         </View>

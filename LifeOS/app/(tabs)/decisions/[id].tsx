@@ -22,7 +22,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useDecision, useDecisionOutcomes, useDeleteDecision, useUpdateDecision } from '@/hooks/useDecisions';
 
-import { ConfidenceRing, SkeletonBlock } from '@/components/ui';
+import { ConfidenceRing, SkeletonBlock, PressableScale } from '@/components/ui';
 import {
     InfoCard,
     OutcomeTimelineItem,
@@ -357,9 +357,9 @@ export default function DecisionDetailScreen() {
                 {/* ── Bottom CTAs ── */}
                 <View style={{ paddingHorizontal: SPACING.xxl, paddingTop: SPACING.xl, gap: SPACING.md }}>
                 {decision.status === 'active' && (
-                    <TouchableOpacity onPress={handleCheckin} activeOpacity={0.85} accessibilityLabel="Record check-in" accessibilityRole="button">
+                    <PressableScale onPress={handleCheckin} accessibilityLabel="Record check-in" accessibilityRole="button">
                         <LinearGradient
-                            colors={['#3525CD', '#4F46E5']}
+                            colors={['#3525CD', COLORS.primary]}
                             start={{ x: 0, y: 0 }}
                             end={{ x: 1, y: 1 }}
                             style={{
@@ -369,19 +369,15 @@ export default function DecisionDetailScreen() {
                                 gap: SPACING.sm,
                                 paddingVertical: 16,
                                 borderRadius: RADII.md,
-                                shadowColor: '#4F46E5',
-                                shadowOffset: { width: 0, height: 6 },
-                                shadowOpacity: 0.3,
-                                shadowRadius: 12,
-                                elevation: 6,
+                                ...SHADOWS.button,
                             }}
                         >
                             <Ionicons name="checkbox-outline" size={18} color={COLORS.textOnPrimary} />
                             <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: COLORS.textOnPrimary }}>Record Check-in</Text>
                         </LinearGradient>
-                    </TouchableOpacity>
+                    </PressableScale>
                 )}
-                <TouchableOpacity onPress={handleAnalyzeAI} activeOpacity={0.85} accessibilityLabel="Analyze with AI" accessibilityRole="button">
+                <PressableScale onPress={handleAnalyzeAI} accessibilityLabel="Analyze with AI" accessibilityRole="button">
                     <View style={{
                         flexDirection: 'row',
                         alignItems: 'center',
@@ -397,7 +393,7 @@ export default function DecisionDetailScreen() {
                         <Ionicons name="sparkles" size={18} color={COLORS.primary} />
                         <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: COLORS.textPrimary }}>Analyze with AI</Text>
                     </View>
-                </TouchableOpacity>
+                </PressableScale>
             </View>
             </ScrollView>
         </SafeAreaView>
