@@ -7,7 +7,6 @@ import React, { useState, useCallback } from 'react';
 import {
     View,
     Text,
-    TouchableOpacity,
     RefreshControl,
     StatusBar,
     TextInput,
@@ -21,7 +20,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useDecisions, decisionKeys } from '@/hooks/useDecisions';
 import { CATEGORY_FILTERS, STATUS_FILTERS } from '@/utils/constants';
 import { DecisionCard, DecisionCardSkeleton } from '@/components/decisions';
-import { EmptyState } from '@/components/ui';
+import { EmptyState, PressableScale, FadeInView } from '@/components/ui';
 import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
 
 export default function DecisionListScreen() {
@@ -83,7 +82,7 @@ export default function DecisionListScreen() {
                         </Text>
                     )}
                 </View>
-                <TouchableOpacity
+                <PressableScale
                     onPress={handleNew}
                     style={{
                         width: 40,
@@ -98,7 +97,7 @@ export default function DecisionListScreen() {
                     accessibilityRole="button"
                 >
                     <Ionicons name="add" size={22} color="#FFFFFF" />
-                </TouchableOpacity>
+                </PressableScale>
             </View>
 
             {/* ── Search Bar ── */}
@@ -113,9 +112,9 @@ export default function DecisionListScreen() {
                         style={{ flex: 1, fontFamily: 'Inter_400Regular', fontSize: 15, color: COLORS.textPrimary, marginLeft: 10, height: 48 }}
                     />
                     {searchQuery.length > 0 && (
-                        <TouchableOpacity onPress={() => setSearchQuery('')}>
+                        <PressableScale onPress={() => setSearchQuery('')}>
                             <Ionicons name="close-circle" size={18} color={COLORS.outlineVariant} />
-                        </TouchableOpacity>
+                        </PressableScale>
                     )}
                 </View>
             </View>
@@ -131,17 +130,16 @@ export default function DecisionListScreen() {
                 renderItem={({ item: cat }) => {
                     const isActive = selectedCategory === cat.key;
                     return (
-                        <TouchableOpacity
+                        <PressableScale
                             key={cat.key}
                             onPress={() => setSelectedCategory(isActive ? '' : cat.key)}
-                            activeOpacity={0.8}
                             style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: SPACING.md, paddingVertical: 9, borderRadius: RADII.md, backgroundColor: isActive ? COLORS.primary : COLORS.surfaceLowest, borderWidth: 1, borderColor: isActive ? COLORS.primary : COLORS.surfaceDim }}
                         >
                             <Ionicons name={cat.icon} size={15} color={isActive ? COLORS.textOnPrimary : COLORS.textSecondary} />
                             <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: isActive ? COLORS.textOnPrimary : COLORS.textBody }}>
                                 {cat.label}
                             </Text>
-                        </TouchableOpacity>
+                        </PressableScale>
                     );
                 }}
             />
@@ -151,16 +149,15 @@ export default function DecisionListScreen() {
                 {STATUS_FILTERS.map((sf) => {
                     const isActive = selectedStatus === sf.key;
                     return (
-                        <TouchableOpacity
+                        <PressableScale
                             key={sf.key}
                             onPress={() => setSelectedStatus(isActive ? '' : sf.key)}
-                            activeOpacity={0.8}
                             style={{ paddingHorizontal: SPACING.md, paddingVertical: 7, borderRadius: RADII.full, backgroundColor: isActive ? COLORS.textPrimary : 'transparent', borderWidth: isActive ? 0 : 1, borderColor: COLORS.surfaceDim }}
                         >
                             <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 12, color: isActive ? COLORS.textOnPrimary : COLORS.textSecondary }}>
                                 {sf.label}
                             </Text>
-                        </TouchableOpacity>
+                        </PressableScale>
                     );
                 })}
                 {!isLoading && (
@@ -196,11 +193,11 @@ export default function DecisionListScreen() {
             </View>
 
             {/* ── FAB ── */}
-            <TouchableOpacity onPress={handleNew} activeOpacity={0.85} style={{ position: 'absolute', bottom: 24, right: 24, zIndex: 10 }}>
+            <PressableScale onPress={handleNew} style={{ position: 'absolute', bottom: 24, right: 24, zIndex: 10 }}>
                 <LinearGradient colors={['#3525CD', COLORS.primary]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ width: 58, height: 58, borderRadius: 20, alignItems: 'center', justifyContent: 'center', ...SHADOWS.fab }}>
                     <Ionicons name="add" size={28} color={COLORS.textOnPrimary} />
                 </LinearGradient>
-            </TouchableOpacity>
+            </PressableScale>
         </SafeAreaView>
     );
 }
