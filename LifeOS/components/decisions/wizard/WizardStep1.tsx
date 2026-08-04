@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SectionLabel } from './StepIndicator';
 import { PressableScale } from '@/components/ui';
@@ -95,42 +95,41 @@ export const WizardStep1: React.FC<Step1Props> = ({
                         const isActive = state.category === cat.key;
                         const catColor = getCategoryColor(cat.key);
                         return (
-                            <TouchableOpacity
-                                key={cat.key}
-                                onPress={() => dispatch({ type: 'SET_FIELD', field: 'category', value: cat.key })}
-                                activeOpacity={0.8}
-                                style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    gap: SPACING.sm,
-                                    paddingHorizontal: SPACING.lg,
-                                    paddingVertical: 12,
-                                    borderRadius: RADII.md,
-                                    borderWidth: 1.5,
-                                    borderColor: isActive ? catColor : COLORS.outlineVariant,
-                                    backgroundColor: isActive ? catColor + '12' : COLORS.surfaceLowest,
-                                }}
-                            >
-                                <Ionicons name={cat.icon} size={16} color={isActive ? catColor : COLORS.textSecondary} />
-                                <Text
+                                <PressableScale
+                                    key={cat.key}
+                                    onPress={() => dispatch({ type: 'SET_FIELD', field: 'category', value: cat.key })}
                                     style={{
-                                        fontFamily: isActive ? 'Inter_700Bold' : 'Inter_500Medium',
-                                        fontSize: 14,
-                                        color: isActive ? catColor : COLORS.textPrimary,
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        gap: SPACING.sm,
+                                        paddingHorizontal: SPACING.lg,
+                                        paddingVertical: 12,
+                                        borderRadius: RADII.md,
+                                        borderWidth: 1.5,
+                                        borderColor: isActive ? catColor : COLORS.outlineVariant,
+                                        backgroundColor: isActive ? catColor + '12' : COLORS.surfaceLowest,
                                     }}
                                 >
-                                    {cat.label}
-                                </Text>
-                            </TouchableOpacity>
+                                    <Ionicons name={cat.icon} size={16} color={isActive ? catColor : COLORS.textSecondary} />
+                                    <Text
+                                        style={{
+                                            fontFamily: isActive ? 'Inter_700Bold' : 'Inter_500Medium',
+                                            fontSize: 14,
+                                            color: isActive ? catColor : COLORS.textPrimary,
+                                        }}
+                                    >
+                                        {cat.label}
+                                    </Text>
+                                </PressableScale>
                         );
                     })}
                 </View>
                 {!showAllCategories && (
-                    <TouchableOpacity onPress={() => setShowAllCategories(true)} style={{ marginTop: SPACING.md }}>
+                    <PressableScale onPress={() => setShowAllCategories(true)} style={{ marginTop: SPACING.md }}>
                         <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: COLORS.primary }}>
                             Show more categories...
                         </Text>
-                    </TouchableOpacity>
+                    </PressableScale>
                 )}
             </View>
 

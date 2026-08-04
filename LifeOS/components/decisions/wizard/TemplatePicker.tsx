@@ -3,7 +3,8 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, Modal, FlatList } from 'react-native';
+import { PressableScale } from '@/components/ui';
 import { Ionicons } from '@expo/vector-icons';
 import { useTemplates } from '@/hooks/useDecisions';
 import { getCategoryColor } from '@/utils/helpers';
@@ -27,9 +28,9 @@ export const TemplatePicker: React.FC<TemplatePickerProps> = ({ visible, onClose
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 24, marginBottom: 16 }}>
                         <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 18, color: '#111827' }}>Choose a Template</Text>
-                        <TouchableOpacity onPress={onClose}>
+                        <PressableScale onPress={onClose}>
                             <Ionicons name="close" size={24} color="#6B7280" />
-                        </TouchableOpacity>
+                        </PressableScale>
                     </View>
 
                     {isLoading ? (
@@ -51,9 +52,8 @@ export const TemplatePicker: React.FC<TemplatePickerProps> = ({ visible, onClose
                             keyExtractor={(item) => item.id}
                             contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}
                             renderItem={({ item }) => (
-                                <TouchableOpacity
+                                <PressableScale
                                     onPress={() => { onSelect(item); onClose(); }}
-                                    activeOpacity={0.7}
                                     style={{
                                         flexDirection: 'row',
                                         alignItems: 'center',
@@ -87,7 +87,7 @@ export const TemplatePicker: React.FC<TemplatePickerProps> = ({ visible, onClose
                                     <View style={{ backgroundColor: '#E5E7EB', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 }}>
                                         <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 11, color: '#6B7280', textTransform: 'capitalize' }}>{item.category}</Text>
                                     </View>
-                                </TouchableOpacity>
+                                </PressableScale>
                             )}
                         />
                     )}

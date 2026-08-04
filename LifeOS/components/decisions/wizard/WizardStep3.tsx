@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SectionLabel } from './StepIndicator';
 import { PressableScale } from '@/components/ui';
@@ -22,10 +22,10 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
         <View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
                 <SectionLabel text="Expected Metrics" />
-                <TouchableOpacity onPress={() => dispatch({ type: 'ADD_METRIC' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <PressableScale onPress={() => dispatch({ type: 'ADD_METRIC' })} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                     <Ionicons name="add" size={16} color={COLORS.primary} />
                     <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 13, color: COLORS.primary }}>Add Metric</Text>
-                </TouchableOpacity>
+                </PressableScale>
             </View>
 
             {state.expectedOutcomes.length === 0 ? (
@@ -78,9 +78,9 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
                                     style={{ fontFamily: 'Inter_700Bold', fontSize: 16, color: COLORS.textPrimary, paddingVertical: 2 }}
                                 />
                             </View>
-                            <TouchableOpacity onPress={() => dispatch({ type: 'REMOVE_METRIC', index: i })} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                            <PressableScale onPress={() => dispatch({ type: 'REMOVE_METRIC', index: i })} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                                 <Ionicons name="trash-outline" size={18} color={COLORS.danger} />
-                            </TouchableOpacity>
+                            </PressableScale>
                         </View>
                     </View>
                 ))
@@ -118,7 +118,7 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
 
             <View style={{ flexDirection: 'row', gap: 4, marginBottom: 8 }}>
                 {Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
-                    <TouchableOpacity
+                    <PressableScale
                         key={level}
                         onPress={() => dispatch({ type: 'SET_FIELD', field: 'confidenceLevel', value: level })}
                         style={{
@@ -127,7 +127,9 @@ export const WizardStep3: React.FC<Step3Props> = ({ state, dispatch }) => (
                             borderRadius: 4,
                             backgroundColor: level <= state.confidenceLevel ? COLORS.primary : COLORS.surfaceDim,
                         }}
-                    />
+                    >
+                        <View />
+                    </PressableScale>
                 ))}
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
