@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { PressableScale } from '@/components/ui';
 import { COLORS, SPACING, RADII, SHADOWS, TYPOGRAPHY } from '@/utils/designTokens';
@@ -88,9 +88,9 @@ export const WizardStep2: React.FC<Step2Props> = ({ state, dispatch }) => (
                         style={{ flex: 1, fontFamily: 'Inter_500Medium', fontSize: 15, color: COLORS.textPrimary, paddingVertical: 12 }}
                     />
                     {alt.length > 0 && state.alternatives.length > 1 && (
-                        <TouchableOpacity onPress={() => dispatch({ type: 'REMOVE_ALTERNATIVE', index: i })} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                        <PressableScale onPress={() => dispatch({ type: 'REMOVE_ALTERNATIVE', index: i })} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                             <Ionicons name="trash-outline" size={18} color={COLORS.danger} />
-                        </TouchableOpacity>
+                        </PressableScale>
                     )}
                 </View>
             ))}

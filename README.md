@@ -76,6 +76,11 @@ But we rarely track whether these decisions actually worked out. LifeOS answers:
 - Context-aware prompts based on decision timeline
 - Email and push notification support
 
+### 6. **Premium UI/UX Design System**
+- **Fluid Micro-interactions:** Tactile feedback on all touchpoints using physics-based `PressableScale` animations.
+- **Staggered Entrances:** Content gracefully reveals itself via `FadeInView` layout animations.
+- **Design Tokens:** Strict enforcement of a unified color palette, spacing, and typography (Inter) ensuring a high-end, glassmorphic, and dynamic aesthetic across both mobile and web.
+
 ---
 
 ## 🏗️ Architecture
@@ -149,11 +154,11 @@ Powers intelligent features:
 ## 🛠️ Technology Stack
 
 ### Frontend
-- **Framework:** Next.js 14+ (React 18, TypeScript)
+- **Framework:** Expo Router (React Native for iOS/Android + React Native Web)
 - **State Management:** Zustand + React Query
-- **UI Components:** Tailwind CSS + shadcn/ui
-- **Charts:** Recharts / Chart.js
-- **Mobile:** React Native (iOS & Android)
+- **Styling:** NativeWind v5 (Tailwind CSS v4) + Custom Premium Design Tokens
+- **Animations:** React Native Reanimated (Physics-based micro-interactions)
+- **Icons & Fonts:** Expo Vector Icons, Google Fonts (Inter)
 
 ### Backend
 - **Decision/Outcome/Analytics Services:** Node.js (TypeScript) with Express/Fastify

@@ -39,6 +39,7 @@ export type UserInsight = {
   description: string;
   supportingData: Record<string, any>;
   actionable: boolean;
+  actionSuggestion?: string;
   category: string | null;
   significance: number;
   viewed: boolean;

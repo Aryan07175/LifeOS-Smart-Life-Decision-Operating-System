@@ -13,7 +13,6 @@ import {
     Text,
     ScrollView,
     TextInput,
-    TouchableOpacity,
     StatusBar,
     Alert,
     KeyboardAvoidingView,
@@ -98,9 +97,9 @@ export default function CheckinScreen() {
 
             {/* ── Header ── */}
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: SPACING.lg, paddingVertical: SPACING.md, borderBottomWidth: 1, borderBottomColor: COLORS.surfaceDim }}>
-                <TouchableOpacity onPress={() => router.back()} style={{ padding: SPACING.sm }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                <PressableScale onPress={() => router.back()} style={{ padding: SPACING.sm }} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
                     <Ionicons name="close" size={24} color={COLORS.textPrimary} />
-                </TouchableOpacity>
+                </PressableScale>
                 <Text style={[TYPOGRAPHY.heading, { color: COLORS.textPrimary }]}>Outcome Check-in</Text>
                 <View style={{ width: 40 }} />
             </View>
@@ -128,10 +127,9 @@ export default function CheckinScreen() {
                         <Text style={{ fontFamily: 'Inter_500Medium', fontSize: 13, color: COLORS.textSecondary, textAlign: 'center', marginBottom: SPACING.lg }}>out of 10</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             {Array.from({ length: 10 }, (_, i) => i + 1).map((v) => (
-                                <TouchableOpacity
+                                <PressableScale
                                     key={v}
                                     onPress={() => setSatisfaction(v)}
-                                    activeOpacity={0.7}
                                     style={{
                                         width: 28,
                                         height: 28,
@@ -142,7 +140,7 @@ export default function CheckinScreen() {
                                     }}
                                 >
                                     <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 11, color: v <= satisfaction ? '#FFFFFF' : '#9CA3AF' }}>{v}</Text>
-                                </TouchableOpacity>
+                                </PressableScale>
                             ))}
                         </View>
                     </View>
@@ -165,7 +163,6 @@ export default function CheckinScreen() {
                             fontSize: 15,
                             color: COLORS.textPrimary,
                             lineHeight: 22,
-                            ...SHADOWS.card,
                         }}
                     />
 
@@ -187,7 +184,6 @@ export default function CheckinScreen() {
                             fontSize: 15,
                             color: COLORS.textPrimary,
                             lineHeight: 22,
-                            ...SHADOWS.card,
                         }}
                     />
 
@@ -209,7 +205,6 @@ export default function CheckinScreen() {
                             fontSize: 15,
                             color: COLORS.textPrimary,
                             lineHeight: 22,
-                            ...SHADOWS.card,
                         }}
                     />
 
@@ -222,7 +217,7 @@ export default function CheckinScreen() {
                         ] as const).map((opt) => {
                             const isSelected = wouldDecideAgain === opt.value;
                             return (
-                                <TouchableOpacity
+                                <PressableScale
                                     key={opt.label}
                                     onPress={() => setWouldDecideAgain(isSelected ? null : opt.value)}
                                     style={{
@@ -240,7 +235,7 @@ export default function CheckinScreen() {
                                 >
                                     <Ionicons name={opt.icon as any} size={20} color={isSelected ? opt.color : '#9CA3AF'} />
                                     <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 15, color: isSelected ? opt.color : '#6B7280' }}>{opt.label}</Text>
-                                </TouchableOpacity>
+                                </PressableScale>
                             );
                         })}
                     </View>
@@ -251,7 +246,7 @@ export default function CheckinScreen() {
                         {MOODS.map((m) => {
                             const isSelected = mood === m.value;
                             return (
-                                <TouchableOpacity
+                                <PressableScale
                                     key={m.value}
                                     onPress={() => setMood(m.value)}
                                     style={{
@@ -265,7 +260,7 @@ export default function CheckinScreen() {
                                 >
                                     <Text style={{ fontSize: 28 }}>{m.emoji}</Text>
                                     <Text style={{ fontFamily: 'Inter_600SemiBold', fontSize: 10, color: isSelected ? '#4F46E5' : '#9CA3AF' }}>{m.label}</Text>
-                                </TouchableOpacity>
+                                </PressableScale>
                             );
                         })}
                     </View>
@@ -275,7 +270,7 @@ export default function CheckinScreen() {
                     <View style={{ backgroundColor: '#FFFFFF', borderRadius: 16, padding: 16, shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 1 }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             {Array.from({ length: 10 }, (_, i) => i + 1).map((v) => (
-                                <TouchableOpacity
+                                <PressableScale
                                     key={v}
                                     onPress={() => setStress(v)}
                                     style={{
@@ -290,7 +285,7 @@ export default function CheckinScreen() {
                                     }}
                                 >
                                     <Text style={{ fontFamily: 'Inter_700Bold', fontSize: 13, color: v <= stress ? '#FFFFFF' : '#9CA3AF' }}>{v}</Text>
-                                </TouchableOpacity>
+                                </PressableScale>
                             ))}
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
