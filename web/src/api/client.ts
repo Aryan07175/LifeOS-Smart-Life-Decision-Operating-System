@@ -62,13 +62,15 @@ apiClient.interceptors.response.use(
         const refreshToken = localStorage.getItem('lifeos_refresh_token');
         if (!refreshToken) throw new Error('No refresh token');
 
-        const { data } = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
+        const { data: refreshData } = await axios.post(`${API_BASE_URL}/auth/refresh`, { refreshToken });
+        // Handle both { data: { accessToken } } and flat { accessToken } shapes
+        const tokens = (refreshData?.data?.accessToken) ? refreshData.data : refreshData;
 
-        localStorage.setItem('lifeos_access_token', data.accessToken);
-        localStorage.setItem('lifeos_refresh_token', data.refreshToken);
+        localStorage.setItem('lifeos_access_token', tokens.accessToken);
+        localStorage.setItem('lifeos_refresh_token', tokens.refreshToken);
 
-        processQueue(null, data.accessToken);
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        processQueue(null, tokens.accessToken);
+        originalRequest.headers.Authorization = `Bearer ${tokens.accessToken}`;
         return apiClient(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
