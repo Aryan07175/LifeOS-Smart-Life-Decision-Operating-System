@@ -28,7 +28,7 @@ const NAV_ITEMS = [
     icon: CheckSquare,
     children: [
       { label: 'Pending Check-ins', href: '/checkins' },
-      { label: 'History', href: '/outcomes' },
+      { label: 'History', href: '/decisions?status=completed' },
     ],
   },
   {

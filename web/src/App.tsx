@@ -14,6 +14,7 @@ import DecisionsPage from '@/pages/DecisionsPage';
 import DecisionDetailPage from '@/pages/DecisionDetailPage';
 import NewDecisionPage from '@/pages/NewDecisionPage';
 import CheckInPage from '@/pages/CheckInPage';
+import CheckInsListPage from '@/pages/CheckInsListPage';
 import AnalyticsPage from '@/pages/AnalyticsPage';
 import AIAdvisorPage from '@/pages/AIAdvisorPage';
 import ProfilePage from '@/pages/ProfilePage';
@@ -81,7 +82,8 @@ function AppRoutes() {
         <Route path="/decisions/new" element={<ProtectedRoute><AppShell><NewDecisionPage /></AppShell></ProtectedRoute>} />
         <Route path="/decisions/:id" element={<ProtectedRoute><AppShell><DecisionDetailPage /></AppShell></ProtectedRoute>} />
         <Route path="/decisions/:id/checkin" element={<ProtectedRoute><AppShell><CheckInPage /></AppShell></ProtectedRoute>} />
-        <Route path="/checkins" element={<ProtectedRoute><AppShell><DecisionsPage /></AppShell></ProtectedRoute>} />
+        <Route path="/checkins" element={<ProtectedRoute><AppShell><CheckInsListPage /></AppShell></ProtectedRoute>} />
+        <Route path="/outcomes" element={<Navigate to="/decisions?status=completed" replace />} />
         <Route path="/analytics" element={<ProtectedRoute><AppShell><AnalyticsPage /></AppShell></ProtectedRoute>} />
         <Route path="/ai" element={<ProtectedRoute><AppShell><AIAdvisorPage /></AppShell></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><AppShell><ProfilePage /></AppShell></ProtectedRoute>} />
