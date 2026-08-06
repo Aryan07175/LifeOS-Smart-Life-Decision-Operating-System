@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { User, Mail, Shield, Edit3, CheckCircle2 } from 'lucide-react';
+import { User, Mail, Shield, CheckCircle2 } from 'lucide-react';
 import { authApi } from '@/api/auth';
 import { useAuthStore } from '@/store/authStore';
 import { analyticsApi } from '@/api/analytics';
