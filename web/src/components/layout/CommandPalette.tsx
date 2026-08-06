@@ -109,7 +109,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
                     <p className="px-4 py-1.5 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">{group}</p>
                     {filtered
                       .filter((c) => c.group === group)
-                      .map((command, i) => {
+                      .map((command, _i) => {
                         const globalIndex = filtered.findIndex((c) => c.id === command.id);
                         const isSelected = globalIndex === selected;
                         return (
