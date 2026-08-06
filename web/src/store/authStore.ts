@@ -23,10 +23,23 @@ export const useAuthStore = create<AuthState>((set) => ({
   isHydrated: false,
 
   hydrate: () => {
-    const token = localStorage.getItem('lifeos_access_token');
-    const userStr = localStorage.getItem('lifeos_user');
-    const user = userStr ? JSON.parse(userStr) : null;
-    set({ accessToken: token, user, isHydrated: true });
+    try {
+      const token = localStorage.getItem('lifeos_access_token');
+      const userStr = localStorage.getItem('lifeos_user');
+      let user = null;
+      if (userStr) {
+        try {
+          user = JSON.parse(userStr);
+        } catch {
+          // Corrupt user data — clear it and proceed as logged-out
+          localStorage.removeItem('lifeos_user');
+        }
+      }
+      set({ accessToken: token, user, isHydrated: true });
+    } catch {
+      // localStorage unavailable (e.g. Private Browsing) — treat as logged-out
+      set({ accessToken: null, user: null, isHydrated: true });
+    }
   },
 
   setTokens: (accessToken, refreshToken, user) => {
