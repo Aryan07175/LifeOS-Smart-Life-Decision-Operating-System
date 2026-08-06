@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { getCategoryColor, getCategoryBg, getCategoryLabel } from '@/lib/helpers';
+import { getCategoryColor, getCategoryLabel } from '@/lib/helpers';
 import { Skeleton } from '@/components/ui/Skeleton';
 import type { AnalyticsSummary } from '@/api/analytics';
 

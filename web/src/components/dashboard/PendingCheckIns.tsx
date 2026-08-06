@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Calendar, ArrowRight, CheckCircle2, Clock, SkipForward } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Calendar, CheckCircle2, Clock, SkipForward } from 'lucide-react';
+
 import { getUrgencyInfo, getReminderLabel, formatDate } from '@/lib/helpers';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { ShimmerButton } from '@/components/ui/ShimmerButton';
