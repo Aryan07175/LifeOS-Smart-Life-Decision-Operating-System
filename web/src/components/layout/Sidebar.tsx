@@ -3,7 +3,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Scale, CheckSquare, BarChart3, Sparkles,
-  User, Settings, ChevronDown, ChevronRight, Menu, X,
+  User, Settings, ChevronRight, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';

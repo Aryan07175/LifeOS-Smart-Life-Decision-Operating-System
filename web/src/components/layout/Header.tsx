@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Search, Bell, Plus, Menu, Command,
-  LayoutDashboard, Scale, BarChart3, Sparkles, CheckSquare,
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+
 import { ShimmerButton } from '@/components/ui/ShimmerButton';
 
 interface HeaderProps {
