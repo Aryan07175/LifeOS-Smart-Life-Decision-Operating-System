@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Plus, Search, Filter, X } from 'lucide-react';
+import { Plus, Search, X } from 'lucide-react';
 import { decisionsApi } from '@/api/decisions';
 import { ShimmerButton } from '@/components/ui/ShimmerButton';
 import { SkeletonCard } from '@/components/ui/Skeleton';

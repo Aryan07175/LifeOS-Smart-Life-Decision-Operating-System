@@ -1,5 +1,7 @@
 import apiClient from './client';
 
+const API_BASE_URL = 'https://r2z3a7sivkzpowumc5ogz4ypsa0nvinu.lambda-url.ap-south-1.on.aws/api/v1';
+
 export type PreDecisionAnalysis = {
   verdict: 'proceed' | 'caution' | 'reconsider';
   confidenceInVerdict: number;
@@ -42,7 +44,7 @@ export const aiApi = {
   ): Promise<void> => {
     const token = localStorage.getItem('lifeos_access_token');
     const response = await fetch(
-      'https://r2z3a7sivkzpowumc5ogz4ypsa0nvinu.lambda-url.ap-south-1.on.aws/api/v1/ai/chat',
+      `${API_BASE_URL}/ai/chat`,
       {
         method: 'POST',
         headers: {
@@ -62,6 +64,7 @@ export const aiApi = {
     const decoder = new TextDecoder();
     let buffer = '';
 
+    let hasError = false;
     try {
       while (true) {
         const { done, value } = await reader.read();
@@ -85,9 +88,10 @@ export const aiApi = {
         }
       }
     } catch (err) {
+      hasError = true;
       onError(err as Error);
     } finally {
-      onDone();
+      if (!hasError) onDone();
     }
   },
 

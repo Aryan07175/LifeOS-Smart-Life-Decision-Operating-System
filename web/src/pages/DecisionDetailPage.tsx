@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MoreVertical, CheckCircle, ChevronRight, Calendar, Target, Edit, Trash2, Plus } from 'lucide-react';
+import { ArrowLeft, MoreVertical, CheckCircle, Calendar, Target, Edit, Trash2, Plus } from 'lucide-react';
 import { decisionsApi } from '@/api/decisions';
-import { getCategoryColor, getCategoryLabel, getConfidenceColor, getStatusLabel, formatDate, timeAgo } from '@/lib/helpers';
-import { Badge } from '@/components/ui/Badge';
+import { getCategoryColor, getCategoryLabel, getStatusLabel, formatDate } from '@/lib/helpers';
+
 import { ShimmerButton } from '@/components/ui/ShimmerButton';
 import { SpotlightCard } from '@/components/ui/SpotlightCard';
 import { Skeleton } from '@/components/ui/Skeleton';

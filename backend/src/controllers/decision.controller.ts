@@ -113,8 +113,12 @@ export const createDecision = async (req: AuthRequest, res: Response): Promise<v
 
         const body = req.body;
 
-        if (!body.title) {
+        if (!body.title || !body.title.trim()) {
             res.status(400).json({ error: "Title is required" });
+            return;
+        }
+        if (body.title.trim().length > 500) {
+            res.status(400).json({ error: "Title must be 500 characters or fewer" });
             return;
         }
 

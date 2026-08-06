@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, ArrowRight, Sparkles, Plus, Trash2, TrendingUp, Calendar, AlertTriangle, CheckCircle2, XCircle, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Sparkles, Plus, Trash2, TrendingUp, Calendar, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react';
 import { decisionsApi } from '@/api/decisions';
 import { aiApi } from '@/api/ai';
 import { ShimmerButton } from '@/components/ui/ShimmerButton';
-import { GlowBorder } from '@/components/ui/GlowBorder';
+
 import { getCategoryColor, getCategoryLabel } from '@/lib/helpers';
 import type { DecisionCreatePayload, Alternative, ExpectedOutcome } from '@/api/decisions';
 import type { PreDecisionAnalysis } from '@/api/ai';
@@ -216,7 +216,6 @@ export default function NewDecisionPage() {
   };
 
   const canProceedStep1 = title.trim().length > 0;
-  const canProceedStep2 = true;
 
   const SLIDE = {
     initial: (dir: number) => ({ opacity: 0, x: dir * 40 }),

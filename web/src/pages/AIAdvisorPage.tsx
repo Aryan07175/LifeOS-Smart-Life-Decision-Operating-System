@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { motion, AnimatePresence } from 'framer-motion';
+
+import { motion } from 'framer-motion';
 import {
-  Sparkles, Send, Plus, ChevronRight, ArrowRight,
-  User, Bot, RotateCcw, History,
+  Sparkles, Send, ChevronRight, ArrowRight,
+  User, RotateCcw,
 } from 'lucide-react';
 import { aiApi } from '@/api/ai';
 import type { SSEEvent } from '@/api/ai';
@@ -186,7 +186,7 @@ export default function AIAdvisorPage() {
           );
         }
       },
-      (err) => {
+      (_err) => {
         setMessages((prev) =>
           prev.map((m) =>
             m.id === assistantId

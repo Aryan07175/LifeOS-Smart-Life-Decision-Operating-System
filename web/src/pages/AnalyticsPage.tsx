@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import {
@@ -8,12 +8,10 @@ import {
 import { Sparkles, X, TrendingUp, Scale, Star, Bell, Activity, ChevronRight } from 'lucide-react';
 import { analyticsApi } from '@/api/analytics';
 import { SpotlightCard } from '@/components/ui/SpotlightCard';
-import { GlowBorder } from '@/components/ui/GlowBorder';
 import { Badge } from '@/components/ui/Badge';
 import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import { SkeletonKPI, Skeleton } from '@/components/ui/Skeleton';
 import { getCategoryColor, getCategoryLabel } from '@/lib/helpers';
-import { cn } from '@/lib/utils';
 import type { UserInsight } from '@/api/analytics';
 
 // ── Custom Tooltip ────────────────────────────────────────────────────────────

@@ -22,7 +22,8 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
         return;
     }
     try {
-        const secret: string = process.env.JWT_SECRET ? String(process.env.JWT_SECRET) : "default_secret";
+        const secret = process.env.JWT_SECRET;
+        if (!secret) throw new Error('JWT_SECRET environment variable is not set.');
         const decoded = jwt.verify(token, secret) as jwt.JwtPayload;
         req.user = { userId: decoded.userId as string, email: decoded.email as string, role: decoded.role as string };
         next();

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, ArrowRight, X, Lightbulb } from 'lucide-react';
+import { Sparkles, ArrowRight, X } from 'lucide-react';
 import { GlowBorder } from '@/components/ui/GlowBorder';
 import { SpotlightCard } from '@/components/ui/SpotlightCard';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
