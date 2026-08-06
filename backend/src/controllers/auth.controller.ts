@@ -7,7 +7,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
-const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) throw new Error('JWT_SECRET environment variable is required but not set.');
 const JWT_EXPIRY = process.env.JWT_EXPIRY || "7d";
 const SALT_ROUNDS = 12;
 
