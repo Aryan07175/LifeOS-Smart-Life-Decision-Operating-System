@@ -40,16 +40,16 @@ export const updateMe = async (req: AuthRequest, res: Response): Promise<void> =
 
         const { firstName, lastName, displayName, timezone, locale } = req.body;
 
+        const updateData: Record<string, unknown> = { updatedAt: new Date() };
+        if (firstName !== undefined) updateData.firstName = firstName;
+        if (lastName !== undefined) updateData.lastName = lastName;
+        if (displayName !== undefined) updateData.displayName = displayName;
+        if (timezone !== undefined) updateData.timezone = timezone;
+        if (locale !== undefined) updateData.locale = locale;
+
         const updated = await db
             .update(users)
-            .set({
-                firstName,
-                lastName,
-                displayName,
-                timezone,
-                locale,
-                updatedAt: new Date(),
-            })
+            .set(updateData)
             .where(eq(users.id, userId))
             .returning();
 
